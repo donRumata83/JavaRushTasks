@@ -1,6 +1,5 @@
 package com.javarush.task.task26.task2603;
 
-
 import java.util.Comparator;
 
 /*
@@ -11,19 +10,18 @@ public class Solution {
     {
         private Comparator<T> [] comparators;
 
-        public CustomizedComparator(Comparator<T>... comparator) {
-            comparators = new Comparator[comparator.length];
-            for (int i = 0; i < comparators.length; i++) {
-                comparators[i] = comparator[i];
-            }
+        public CustomizedComparator(Comparator<T>... comparators) {
+            this.comparators = comparators;
         }
 
         @Override
         public int compare(T o1, T o2) {
             int result = 0;
-            for (int i = 0; i < comparators.length; ) {
-                if (comparators[i].compare(o1, o2) == 0) i++;
-                else return comparators[i].compare(o1, o2);
+            for (Comparator comparator : comparators) {
+                result = comparator.compare(o1, o2);
+                if (result != 0) {
+                    break;
+                }
             }
             return result;
         }
