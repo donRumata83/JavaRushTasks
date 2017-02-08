@@ -1,0 +1,11 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2603">
+<h3>Убежденному убеждать других не трудно</h3>
+<p>В таблице есть колонки, по которым можно сортировать.<br />
+Пользователь имеет возможность настроить под себя список колонок, которые будут сортироваться.<br />
+Напиши <strong><span class="text-corporate">public static</span></strong> компаратор <mark>CustomizedComparator</mark>, который будет:<br />
+1. в конструкторе <strong>принимать</strong> <strong>массив</strong> компараторов.<br />
+2. <strong>сортировать</strong> <strong>данные</strong> в порядке, соответствующем последовательности компараторов.<br />
+Все переданные компараторы сортируют дженерик тип <span class="text-corporate">Т</span>.<br />
+В конструктор передается как минимум <strong>один</strong> <strong>компаратор</strong>.</p>
+
+</div>
