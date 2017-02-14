@@ -1,0 +1,7 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2607">
+<h3>Вежливость - это искусственно созданное хорошее настроение</h3>
+<p>В классе <strong><span class="text-corporate">Solution</span></strong> создай <strong><span class="text-corporate">public static</span></strong> класс <strong><span class="text-corporate">IntegerHolder</span></strong>.<br />
+<span class="text-corporate"><strong>IntegerHolder</strong></span> должен быть для типа <span class="text-corporate">int</span> (<em>имя переменной должно быть </em><mark class="user">value</mark>), быть <mark class="user">thread safe</mark> и изменяемым.<br />
+В этом классе должны быть два <mark>public</mark> метода <mark>get</mark> и <mark>set</mark>.</p>
+
+</div>

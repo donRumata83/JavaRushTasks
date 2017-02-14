@@ -1,0 +1,7 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2608">
+<h3>Мудрый человек думает раз, прежде чем два раза сказать</h3>
+<p>Все методы, кроме метода <mark>main</mark>, класса <span class="text-corporate"><strong>Solution</strong></span> должны быть <mark class="user">thread safe</mark>.<br />
+Сделайте так, чтобы оба метода могли выполняться одновременно двумя различными тредами.<br />
+<mark>synchronized(<strong>this</strong>)</mark> для этого не подходит, используй другой объект для лока.</p>
+
+</div>
