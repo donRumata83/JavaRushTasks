@@ -28,10 +28,10 @@ public class Solution {
 
     public Object get(Object key) {
         int hash = hash(key);
-        int i;
-        if (hash < NUMBER_LOCKS) i = hash;
-        else i = NUMBER_LOCKS-1;
-        synchronized (locks[i]) {
+        int j;
+        if (buckets.length < NUMBER_LOCKS) j = hash;
+        else j = hash%NUMBER_LOCKS;
+        synchronized (locks[j]) {
             for (Node m = buckets[hash]; m != null; m = m.next) {
                 if (m.key.equals(key)) return m.value;
             }
@@ -42,8 +42,8 @@ public class Solution {
     public void clear() {
         for (int i = 0; i < buckets.length; i++) {
             int j;
-            if (i < NUMBER_LOCKS) j = i;
-            else j = NUMBER_LOCKS-1;
+            if (buckets.length < NUMBER_LOCKS) j = i;
+            else j = i%NUMBER_LOCKS;
             synchronized (locks[j]) {
                 buckets[i] = null;
             }
