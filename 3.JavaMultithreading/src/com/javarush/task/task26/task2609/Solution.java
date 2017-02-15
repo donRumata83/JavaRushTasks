@@ -29,7 +29,7 @@ public class Solution {
     public Object get(Object key) {
         int hash = hash(key);
         int j;
-        if (buckets.length < NUMBER_LOCKS) j = hash;
+        if (hash < NUMBER_LOCKS) j = hash;
         else j = hash%NUMBER_LOCKS;
         synchronized (locks[j]) {
             for (Node m = buckets[hash]; m != null; m = m.next) {
