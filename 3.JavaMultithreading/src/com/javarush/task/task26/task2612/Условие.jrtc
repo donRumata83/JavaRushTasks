@@ -1,0 +1,11 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2612">
+<h3>Весь мир играет комедию</h3>
+<p>Почитать про<em><strong> java.util.concurrent.locks.Lock</strong></em> на <em>http://docs.oracle.com/</em> (<em>там все есть в джавадоках!</em>)<br />
+Написать реализацию метода <mark>someMethod</mark>:<br />
+1. попытаться захватить лок<br />
+1.1. если лок занят, то вызвать метод <mark>ifLockIsBusy</mark><br />
+1.2. если лок свободен, то:<br />
+1.2.1 вызвать метод <mark>ifLockIsFree</mark><br />
+1.2.2 отпустить лок при любых условиях, даже если <mark>ifLockIsFree</mark> будет кидать исключение</p>
+
+</div>
