@@ -1,0 +1,163 @@
+<div class="wdghtml" taskKey="com.javarush.task.task22.task2213.big15">
+<h3>Тетрис(15)</h3>
+<p>Напиши реализацию метода <mark>step</mark> в классе <span class="text-corporate"><strong>Tetris</strong></span>.<br />
+В методе надо переместить фигурку вниз на один шаг.</p>
+<p>Если после перемещения положить фигурку на текущее место невозможно, то:<br />
+а) поднять ее обратно (<mark>up</mark>)<br />
+б) &#171;<em><strong>приземлить</strong></em>&#187; ее (<mark>landed</mark>)<br />
+в) удалить все &#171;<em><strong>полные линии</strong></em>&#187; в объекте <mark class="green">field</mark><br />
+г) создать новую фигурку взамен старой.</p>
+
+<hr>
+<h3>Тетрис(14)</h3>
+<p>Напиши реализацию метода <mark>removeFullLines</mark> в классе <span class="text-corporate"><strong>Field</strong></span><br />
+<strong>Надо</strong><br />
+а) удалить все строки из матрицы, которые полностью заполнены (<em>состоят из одних единиц</em>)<br />
+б) сместить оставшиеся строки вниз<br />
+в) создать новые строки взамен отсутствующих</p>
+<p><strong>ВАЖНО!</strong><br />
+<span class="text-neon">matrix[y][x] содержит элемент с координатами (x,y)</span><br />
+<span class="text-neon"> matrix[i] содержит i-ю строку</span><br />
+<span class="text-neon"> а) Мы можем удалить стоку:</span><br />
+<span class="text-neon"> matrix[i] = null</span></p>
+<p>б) скопировать <em>[ссылку на]</em> строку:<br />
+<span class="text-neon">matrix[i+1] = matrix[i];</span></p>
+<p>в) создать новую строку:<br />
+<span class="text-neon">matrix[i] = new int[width];</span></p>
+
+<hr>
+<h3>Тетрис(13)</h3>
+<p>Теперь приступим к реализации созданных методов.<br />
+Напиши реализацию метода <mark>print</mark> в классе <span class="text-corporate"><strong>Field</strong></span><br />
+а) Метод должен выводить на экран прямоугольник состоящий из символов &#8216;<strong><em>.</em></strong>&#8216; и &#8216;<em><strong>X</strong></em>&#8216;.<br />
+б) Высота прямоугольника равна <mark class="user">height</mark>, ширина &#8212; <mark class="user">width</mark><br />
+в) Если данная клетка пустая &#8212; вывести точку, если не пустая &#8212; английский <strong>X</strong></p>
+<p><strong>Подсказка:</strong><br />
+<span class="text-neon">if (matrix[y][x]==0) &#8230;</span></p>
+
+<hr>
+<h3>Тетрис(12)</h3>
+<p>В тетрисе мы управляем движением фигурки с помощью клавиатуры.</p>
+<p><strong>Тут есть 4 действия:</strong><br />
+движение влево (<em>кнопка влево</em>)<br />
+движение вправо (<em>кнопка влево</em>)<br />
+поворот фигурки (<em>цифра </em><span class="text-user"><strong>5</strong></span><em> на доп.клавиатуре справа</em>)<br />
+падение вниз (<em>пробел</em>)</p>
+<p>Мы будем обрабатывать ввод с клавиатуры в методе <mark>run()</mark> класса <span class="text-corporate"><strong>Tetris</strong></span>.</p>
+<p>И тут у меня для тебя две новости: хорошая и плохая<br />
+Плохая новость состоит в том, что <strong>java</strong> не позволяет считать нажатые символы с клавиатуры,<br />
+пока пользователь не нажмет <strong>enter</strong>.<br />
+Не очень удобно, правда?</p>
+<p>Хорошая новость состоит в том, что я написал специальный класс (<span class="text-corporate"><strong>KeyboardObserver</strong></span>), который позволяет обойти это ограничение.<br />
+Так что ты можешь воспользоваться им.</p>
+<p>Есть еще и отличная новость.<br />
+Ты до сих пор отлично справлялся, поэтому я помогу тебе немного.<br />
+<strong>Я написал за тебя методы:</strong><br />
+а) <mark><strong>createRandomFigure</strong></mark> в <span class="text-corporate"><strong>FigureFactory</strong></span><br />
+б) <mark>run</mark> в <span class="text-corporate"><strong>Tetris</strong></span></p>
+<p>Изучи их внимательно и переходи дальше.</p>
+
+<hr>
+<h3>Тетрис(11)</h3>
+<p>Теперь создай класс <span class="text-corporate"><strong>FigureFactory</strong></span>.<br />
+С его помощью мы будем создавать фигуры различных форм.<br />
+Пока он будет содержать только один статический метод <mark>createRandomFigure</mark>:<br />
+<mark>static Figure createRandomFigure(int <strong>x</strong>,int <strong>y</strong>)</mark></p>
+
+<hr>
+<h3>Тетрис(10)</h3>
+<p>Также нам понадобятся методы для управления фигуркой.</p>
+<p><strong>Добавь в класс</strong> <span class="text-corporate"><strong>Figure</strong></span> <strong>методы:</strong><br />
+<mark>left()</mark> &#8212; для движения фигурки влево.<br />
+<mark>right()</mark> &#8212; для движения фигурки вправо.<br />
+<mark>down()</mark> &#8212; для движения фигурки вниз.<br />
+<mark>up()</mark> &#8212; для движения фигурки вверх.<br />
+<mark>rotate()</mark> &#8212; для поворота фигурки вокруг главной диагонали.<br />
+<mark>downMaximum()</mark> &#8212; падение фигурки в низ до дна.<br />
+<mark>boolean isCurrentPositionAvailable()</mark> &#8212; проверка &#8212; может ли фигурка быть помещена в текущую позицию. Для теста захардкодь результат в <span class="text-neon"><strong>true</strong></span>, пока мы не реализовали логику.<br />
+<mark>landed()</mark> &#8212; вызывается, когда фигурка достигла дна или уперлась в другую фигурку<br />
+Все ее занятые клетки теперь должны добавиться в <span class="text-corporate"><strong>Field</strong></span>.</p>
+
+<hr>
+<h3>Тетрис(9)</h3>
+<p>Если ты обратил внимание, мы пишем программу &#171;<em>сверху вниз</em>&#171;.<br />
+Сначала решили, какие <strong>классы</strong> нам <strong>нужны</strong>. Затем &#8212; какие <strong>методы</strong>.<br />
+А потом уже начнем писать <strong>код</strong> этих <strong>методов</strong>.<br />
+Таким образом мы разбиваем большую задачу на <strong>множество</strong> <strong>маленьких</strong>.<br />
+Когда код всех методов будет готов, останется только проверить &#8212; так ли все работает, как должно быть.<br />
+И если надо &#8212; внести некоторые изменения.</p>
+
+<hr>
+<h3>Тетрис(8)</h3>
+<p>Теперь создадим костяк класса <span class="text-corporate"><strong>Figure</strong></span>.<br />
+Этот класс будет описывать падающую фигурку.</p>
+<p>Нам понадобятся ее координаты и форма.<br />
+За координаты будут отвечать две переменные <strong>x</strong> и <strong>y</strong>.<br />
+За форму &#8212; матрица. Двумерный массив <span class="text-corporate text-user"><strong>3&#215;3</strong></span>, состоящий из единиц и нулей.<br />
+Единицей мы обозначаем что клетка есть, нулем &#8212; что она пустая.</p>
+<p>Добавь в класс <span class="text-corporate"><strong>Figure</strong></span> два поля поля: <mark class="user">x</mark> типа <span class="text-corporate">int</span>, <mark class="user">y</mark> типа <span class="text-corporate">int</span>.<br />
+Еще добавь двумерный массив: <mark class="user">matrix</mark>(<em>матрица</em>) типа <span class="text-corporate">int[][]</span>.<br />
+Там же добавь <strong>getter&#8217;ы</strong> для созданных переменных.<br />
+Добавь конструктор с тремя параметрами <mark class="user">x</mark>, <mark class="user">y</mark>, <mark class="user">matrix</mark>.</p>
+
+<hr>
+<h3>Тетрис(7)</h3>
+<p>Нам понадобится еще <span class="text-user"><strong>4</strong></span> метода в классе <span class="text-corporate"><strong>Field</strong></span>:<br />
+а) <mark>print()</mark> &#8212; объект будет отрисовывать на экран свое текущее состояние;<br />
+б) <mark>removeFullLines()</mark> &#8212; будет удалять из матрицы полностью заполненные строки и сдвигать вышележащие строки вниз;<br />
+в) <mark>Integer getValue(int <strong>x</strong>, int <strong>y</strong>)</mark> &#8212; возвращает значение которое находится в матрице с координатами <strong>x</strong> и <strong>y</strong>;<br />
+г) <mark>void setValue(int <strong>x</strong>, int <strong>y</strong>, int <strong>value</strong>)</mark> &#8212; устанавливает переданное значение в ячейку массива (<em>матрицы</em>) с координатами <strong>x</strong>, <strong>y</strong>.</p>
+
+<hr>
+<h3>Тетрис(6)</h3>
+<p>Теперь перейдем к классу <span class="text-corporate"><strong>Field</strong></span>.<br />
+Он будет отвечать за хранение данных о текущих занятых и свободных клетках на поле игры.<br />
+Добавь в класс <span class="text-corporate"><strong>Field</strong></span> два поля поля: <mark class="user">width</mark> (<em>ширина</em>) типа <span class="text-corporate">int</span>, <mark class="user">height</mark>(<em>высота</em>) типа <span class="text-corporate">int</span>.<br />
+Так же нам понадобится матрица &#8212; двумерный массив: <mark class="user">matrix</mark>(<em>матрица</em>) типа <span class="text-corporate">int[][]</span>;<br />
+Там же добавь <strong>getter&#8217;ы</strong> для созданных переменных.<br />
+Добавь конструктор с двумя параметрами <mark class="user">width</mark> и <mark class="user">height</mark>. И не забудь про матрицу.</p>
+<p><strong>ВАЖНО!</strong><br />
+Двумерный массив можно представить как массив массивов или как прямоугольную матрицу.<br />
+При этом первой координатой в массиве у нас будет номер строки, а второй &#8212; столбца.<br />
+Другими словами ячейка с координатами <strong>x</strong>, <strong>y</strong> &#8212; это <mark class="user">matrix[<strong>y</strong>][<strong>x</strong>]</mark>.</p>
+
+<hr>
+<h3>Тетрис(5)</h3>
+<p>Теперь нужно создать объект самого Тетриса.<br />
+Добавь в класс <span class="text-corporate"><strong>Tetris</strong></span> статическое поле <mark class="user">game</mark> типа <span class="text-corporate"><strong>Tetris</strong></span>.<br />
+Поле <mark class="user">game</mark> <strong>НЕ</strong> должно быть <strong>приватным</strong>.</p>
+<p>Затем в методе <mark>main</mark> создай объект типа Тетрис и сохрани его в эту переменную.<br />
+Затем добавь вызов метода <mark>run</mark>.</p>
+
+<hr>
+<h3>Тетрис(4)</h3>
+<p><strong></strong>Так же еще нам понадобится пара методов.<br />
+Добавь в класс <span class="text-corporate"><strong>Tetris</strong></span> методы <mark>run()</mark> и <mark>step()</mark>:</p>
+<p><mark>run()</mark> будет отвечать за всю игру.<br />
+А <mark>step()</mark> &#8212; за один шаг в игре.</p>
+<p>Тип возвращаемого значения <strong><span class="text-neon">void</span></strong> для обоих методов.</p>
+<p>Тут и в будущем, если нет явных указаний с каким модификатором доступа создавать метод, то он должен быть публичным, а поле приватным.</p>
+<p><strong>*</strong><em>В общем случае, стоит руководствоваться правилом использования наиболее строгого(из возможных) модификатора доступа.</em></p>
+<p><strong>*</strong><em>Т.е. если логика системы предполагает обращения к методу извне класса, мы не сможем сделать такой метод приватным.</em></p>
+<p><strong>*</strong><em>Но также нет никаких причин указывать уровень доступа public для методов которые будут использованы только в рамках пакета.</em></p>
+<p><strong>*</strong><em>Поначалу это кажется несущественным, но на самом деле это один из основополагающих принципов ООП.</em></p>
+<p><strong>*</strong><em>Учись сразу делать правильно!</em></p>
+
+<hr>
+<h3>Тетрис(3)</h3>
+<p>Поле есть, фигура есть, а как их получить?</p>
+<p>Добавь <strong>геттеры</strong> для полей <mark class="user">field</mark> и <mark class="user">figure</mark>.</p>
+
+<hr>
+<h3>Тетрис(2)</h3>
+<p>Отлично!<br />
+Теперь добавь в класс <span class="text-corporate"><strong>Tetris</strong></span> два поля: <mark class="user">field</mark> типа <strong><span class="text-corporate">Field</span></strong> и <mark class="user">figure</mark> типа <strong><span class="text-corporate">Figure</span></strong>.</p>
+
+<hr>
+<h3>Тетрис(1)</h3>
+<p>Давай напишем игру <strong>Тетрис</strong>!</p>
+<p>Наш <strong>Тетрис</strong> будет состоять из двух вещей: поля из клеток и фигурки, которая падает.<br />
+Поэтому для начала создай <strong>три класса</strong>: <span class="text-corporate"><strong>Field</strong></span>(<em>поле с клетками</em>), <span class="text-corporate"><strong>Figure</strong></span>(<em>фигура</em>) и сам <span class="text-corporate"><strong>Tetris</strong></span>.</p>
+<p>Также нам понадобится метод <mark>main</mark> в классе <span class="text-corporate"><strong>Tetris</strong></span>.</p>
+
+</div>

@@ -1,0 +1,38 @@
+<div class="wdghtml" taskKey="com.javarush.task.task36.task3608.big01">
+<h3>MVC (1)</h3>
+<p>Привет! Эта задача будет на паттерн <strong>MVC</strong> &#8212; <strong>Model-View-Controller</strong>.<br />
+Мы вместе построим архитектуру используя <strong>MVC</strong>. Разберись подробно, что и почему нужно реализовывать так, как я тебе покажу.<br />
+Прочти дополнительную литературу, которую дает профессор в конце уровня.<br />
+Тебя, скорее всего, на собеседовании спросят об этом паттерне либо дадут задание, в котором нужно будет его реализовать.</p>
+<p>Итак&#8230;<br />
+У тебя есть два пакета: bean, содержащий единственный класс <strong><span class="text-corporate">User</span></strong>, и <span class="text-corporate"><strong>dao</strong></span>,<br />
+в котором хранится эмуляция базы данных в пакете <strong><span class="text-red">mock</span></strong> и <strong><span class="text-red">UserDao</span></strong>. <strong><span class="text-red">UserDao</span></strong> &#8212; это уровень <strong>ДАО</strong>, т.е. уровень доступа к базе.<br />
+В нем размещают различные методы по <strong>сохранению</strong> и <strong>получению</strong> объектов из базы данных.<br />
+В реальном приложении строку <span class="text-neon">private DataSource dataSource = DataSource.getInstance()</span> не встретить.<br />
+Я реализовал <strong>DataSource</strong> в виде синглтона. В действительности, у тебя будет что-то такое:<br />
+<span class="text-neon">@Autowired</span><br />
+<span class="text-neon"> private DataSource dataSource;</span></p>
+<p>Фреймворк, которым ты будешь пользоваться, сам создаст объект базы данных и инициализирует поле <mark class="user">dataSource</mark>.</p>
+<p>Запомни, с <strong>ДАО</strong> уровнем работают сервисы. Никакие другие классы в <strong>ДАО</strong> не лезут. В сервисах описана бизнес логика.<br />
+Сервисы забирают данные из базы используя <strong>ДАО</strong>, обрабатывают их и отдают тому, кто данные запросил.<br />
+Однако не все данные хранятся в базе. Например, залогиненый пользователь будет храниться в специальном объекте &#8212; Модели.<br />
+Объект, который содержит в себе данные, необходимые для отображения информации на клиенте, называется Моделью.<br />
+Также этот объект Модель содержит ссылки на все необходимые сервисы.<br />
+Если данных для отображения очень много, то их выделяют в отдельный объект.</p>
+<p>Напишем приложение, которое будет показывать список пользователей и что-то делать с ними, например, обновлять их данные и удалять.</p>
+<p>1. Создай пакет <strong><span class="text-red">model</span></strong>, в котором создай класс <span class="text-corporate"><strong>ModelData</strong></span>.<br />
+<span class="text-corporate"><strong>ModelData</strong></span> &#8212; это объект, который будет хранить необходимые данные для отображения на клиенте.<br />
+Создай поле с геттером и сеттером <span class="text-red"><strong>List</strong>&lt;User&gt; users</span> &#8212; это будет список пользователей для отображения.</p>
+<p>2. Используя любую модель должна быть возможность получить все необходимые данные для отображения. Поэтому в пакете <strong><span class="text-red">model</span></strong> создай интерфейс <strong><span class="text-yellow">Model</span></strong>, который должен содержать метод <mark>ModelData getModelData()</mark>.</p>
+<p>3. В пакете model создай класс <strong><span class="text-corporate">FakeModel</span></strong>, реализующий <strong><span class="text-yellow">Model</span></strong>. Он нам понадобится на начальном этапе.<br />
+В нем создай поле <span class="text-corporate"><strong>ModelData</strong></span> <span class="text-corporate">modelData</span>, которое инициализируй объектом.</p>
+<p>4. В интерфейсе <strong><span class="text-yellow">Model</span></strong> создай метод <mark>void loadUsers()</mark>.<br />
+Реализуй его в <mark>FakeModel</mark>: инициализируй список пользователей <strong><span class="text-red">modelData</span></strong> любыми данными. Они не влияют на тестирование.</p>
+<p><strong>У меня такие данные:</strong><br />
+<span class="text-neon">User{name=&#8217;A&#8217;, id=1, level=1}</span><br />
+<span class="text-neon"> User{name=&#8217;B&#8217;, id=2, level=1}</span></p>
+<p>Думаю, ты помнишь, что все методы интерфейса являются <strong>public</strong>-ами, поэтому модификатор указывать не нужно.<br />
+Программисты часто мОкают данные на начальном этапе. Получение реальных данных реализуется на последних этапах.<br />
+<mark class="neon">Мокать</mark> &#8212; это подменять реальные объекты на хардкоженные, тестовые данные.</p>
+
+</div>

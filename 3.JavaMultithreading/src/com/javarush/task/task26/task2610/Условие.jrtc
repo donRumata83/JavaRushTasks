@@ -1,0 +1,6 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2610">
+<h3>Мир скучен для скучных людей</h3>
+<p>Разберись с <strong>BlockingQueue</strong>.<br />
+По образу и подобию класса <strong><span class="text-corporate">Producer</span></strong> создай класс <strong><span class="text-corporate">Consumer</span></strong>, который будет выводить данные из <mark class="green">BlockingQueue</mark> в консоль.</p>
+
+</div>
