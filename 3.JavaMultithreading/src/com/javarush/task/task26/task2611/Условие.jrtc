@@ -1,0 +1,8 @@
+<div class="wdghtml" taskKey="com.javarush.task.task26.task2611">
+<h3>Мир не меняется, меняемся мы</h3>
+<p>Разберись с <mark class="green">ConcurrentHashMap</mark>.<br />
+В отдельном файле создайте класс <strong><span class="text-corporate">Producer</span></strong>, который будет:<br />
+1. каждые полсекунды добавлять в <mark class="green">ConcurrentHashMap</mark> ключ и значение, где ключ &#8212; счетчик начиная с 1, значение &#8212; фраза: &#171;<em><strong>Some text for </strong></em><span class="text-user"><strong>i</strong></span>&#187; , пример &#171;<em><strong>Some text for 1</strong></em>&#171;.<br />
+2. при возникновении исключения выводить в консоль: &#171;<span class="text-user"><strong>[TREAD_NAME]</strong></span><em><strong> thread was terminated</strong></em>&#171;, пример &#171;<span class="text-user"><strong>[thread-1]</strong></span><em><strong> thread was terminated</strong></em>&#171;.</p>
+
+</div>
