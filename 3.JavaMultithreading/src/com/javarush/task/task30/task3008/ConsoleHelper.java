@@ -16,29 +16,25 @@ public class ConsoleHelper {
     }
 
     public static String readString() {
-        String result;
-        while (true) {
-            try {
-                result = reader.readLine();
-                break;
-            } catch (IOException e) {
-                writeMessage("Произошла ошибка при попытке ввода текста. Попробуйте еще раз.");
+
+        while (true)
+        {
+            try
+            {
+                return reader.readLine();
+
             }
+            catch (IOException e) {writeMessage("Произошла ошибка при попытке ввода текста. Попробуйте еще раз.");}
         }
-        return result;
+
     }
 
-    public int readInt() {
-        int result;
-        while (true) {
+    public static int readInt() {
+        while (true)
+        {
             try {
-                result = Integer.parseInt(readString());
-                break;
-            } catch (NumberFormatException e) {
-                writeMessage("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");
-            }
+                return Integer.parseInt(readString());
+            } catch (NumberFormatException e) {writeMessage("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");}
         }
-
-        return result;
     }
 }
