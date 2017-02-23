@@ -19,16 +19,17 @@ public class Server {
         Socket socket;
         Handler handler;
         while (true) {
+            socket = null;
             try {
                 socket = serverSocket.accept();
-                handler = new Handler(socket);
-                handler.run();
-
             } catch (Exception e) {
                 serverSocket.close();
                 ConsoleHelper.writeMessage(e.getMessage());
                 break;
             }
+            if (socket != null) {
+                handler = new Handler(socket);
+                handler.start();}
 
         }
     }
