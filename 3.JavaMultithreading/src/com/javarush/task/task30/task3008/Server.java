@@ -12,15 +12,23 @@ public class Server {
         int serverPort = ConsoleHelper.readInt();
         ServerSocket serverSocket = new ServerSocket(serverPort);
         ConsoleHelper.writeMessage("Server starts");
-        while (true)
-        {
-            Socket socket = serverSocket.accept();
-            Handler handler = new Handler(socket);
+        Socket socket;
+        Handler handler;
+        while (true) {
+            try {
+                socket = serverSocket.accept();
+                handler = new Handler(socket);
+                handler.run();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                serverSocket.close();
+            }
+
         }
     }
 
-    private static class Handler extends Thread
-    {
+    private static class Handler extends Thread {
         private Socket socket;
 
         public Handler(Socket socket) {
