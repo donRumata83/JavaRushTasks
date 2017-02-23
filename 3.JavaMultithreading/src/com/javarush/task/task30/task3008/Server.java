@@ -10,7 +10,11 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) throws IOException {
         int serverPort = ConsoleHelper.readInt();
-        ServerSocket serverSocket = new ServerSocket(serverPort);
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(serverPort);
+        } catch (Exception e) {
+        }
         ConsoleHelper.writeMessage("Server starts");
         Socket socket;
         Handler handler;
@@ -21,8 +25,9 @@ public class Server {
                 handler.run();
 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
                 serverSocket.close();
+                ConsoleHelper.writeMessage(e.getMessage());
+                break;
             }
 
         }
