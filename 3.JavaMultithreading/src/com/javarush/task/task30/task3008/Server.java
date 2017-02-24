@@ -70,6 +70,15 @@ public class Server {
                 }
             }
         }
+
+        private void sendListOfUsers(Connection connection, String userName) throws IOException {
+            if (connection != null && userName != null) {
+                for (String NAME_IN_MAP : connectionMap.keySet()) {
+                    if (!userName.equals(NAME_IN_MAP) && NAME_IN_MAP != null)
+                        connection.send(new Message(MessageType.USER_ADDED, NAME_IN_MAP));
+                }
+            }
+        }
     }
 }
 
