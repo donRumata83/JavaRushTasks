@@ -16,6 +16,7 @@ public class Server {
         try {
             serverSocket = new ServerSocket(serverPort);
         } catch (Exception e) {
+            ConsoleHelper.writeMessage(e.getLocalizedMessage());
         }
         ConsoleHelper.writeMessage("Server starts");
         Socket socket;
@@ -60,7 +61,7 @@ public class Server {
             while (true) {
                 connection.send(new Message(MessageType.NAME_REQUEST));
                 Message reply = connection.receive();
-                if (reply != null && reply.getType() == MessageType.USER_NAME) {
+                if (reply != null && reply.getType().equals(MessageType.USER_NAME)) {
                     String name = reply.getData();
                     if (!name.isEmpty() && !connectionMap.containsKey(name)) {
                         connectionMap.put(name, connection);
@@ -94,33 +95,31 @@ public class Server {
         }
 
         public void run() {
-            String REMOTE_ADRESS = socket.getRemoteSocketAddress().toString();
-            ConsoleHelper.writeMessage(REMOTE_ADRESS);
+            String REMOTE_ADDRESS = socket.getRemoteSocketAddress().toString(); // getting remote address from client
+            ConsoleHelper.writeMessage(REMOTE_ADDRESS);
             String USER_NAME = null;
-            Connection connection = null;
-            try {
-                connection = new Connection(socket);
 
-                USER_NAME = serverHandshake(connection);
+            try (Connection connection = new Connection(socket)){ // creating a new connection
 
-                if (USER_NAME != null) {
-                    sendBroadcastMessage(new Message(MessageType.USER_ADDED, USER_NAME));
+                USER_NAME = serverHandshake(connection); // getting a user name
 
-                    sendListOfUsers(connection, USER_NAME);
+                sendBroadcastMessage(new Message(MessageType.USER_ADDED, USER_NAME)); // sending a message to other users
 
-                    serverMainLoop(connection, USER_NAME);
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                ConsoleHelper.writeMessage("Exception with adrres" + REMOTE_ADRESS);
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (IOException e1) {}
-                    if (USER_NAME != null && connectionMap.containsKey(USER_NAME)) {
+                sendListOfUsers(connection, USER_NAME); // sending a user list to new user
 
-                        connectionMap.remove(USER_NAME);
-                        sendBroadcastMessage(new Message(MessageType.USER_REMOVED, USER_NAME));
-                    }
+                serverMainLoop(connection, USER_NAME); // getting messages from user
+
+            } catch (IOException e1) {
+                ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e1.getLocalizedMessage());
+
+            } catch (ClassNotFoundException e2) {
+                ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e2.getLocalizedMessage());
+
+            } finally {
+                if (!USER_NAME.isEmpty()  && connectionMap.containsKey(USER_NAME)) {
+                    connectionMap.remove(USER_NAME);
+                    sendBroadcastMessage(new Message(MessageType.USER_REMOVED, USER_NAME));
+
                 }
 
             }
