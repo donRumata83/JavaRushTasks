@@ -1,8 +1,8 @@
 package com.javarush.task.task30.task3008;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.*;
+
 
 /**
  * Created by Rumata on 17.02.2017.
@@ -45,9 +45,11 @@ public class Connection implements Closeable{
 
     public void close() throws IOException
     {
-        socket.close();
-        out.close();
         in.close();
+        out.close();
+        socket.close();
+
+
     }
 
 }

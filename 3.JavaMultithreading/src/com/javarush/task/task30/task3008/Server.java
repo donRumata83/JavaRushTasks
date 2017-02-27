@@ -1,8 +1,7 @@
 package com.javarush.task.task30.task3008;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,12 +57,14 @@ public class Server {
         }
 
         private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
+            Message reply;
+            String name;
             while (true) {
                 connection.send(new Message(MessageType.NAME_REQUEST));
-                Message reply = connection.receive();
+                reply = connection.receive();
                 if (reply != null && reply.getType().equals(MessageType.USER_NAME)) {
-                    String name = reply.getData();
-                    if (!name.isEmpty() && !connectionMap.containsKey(name)) {
+                    name = reply.getData();
+                    if (name != null && !name.isEmpty() && !connectionMap.containsKey(name)) {
                         connectionMap.put(name, connection);
                         connection.send(new Message(MessageType.NAME_ACCEPTED));
                         return name;
@@ -95,36 +96,38 @@ public class Server {
         }
 
         public void run() {
+            ConsoleHelper.writeMessage("Established new connection with remote address " + socket.getRemoteSocketAddress());
             String REMOTE_ADDRESS = socket.getRemoteSocketAddress().toString(); // getting remote address from client
-            ConsoleHelper.writeMessage(REMOTE_ADDRESS);
-            String USER_NAME = null;
+            String userName = null;
 
-            try (Connection connection = new Connection(socket)){ // creating a new connection
 
-                USER_NAME = serverHandshake(connection); // getting a user name
+            try (Connection connection = new Connection(socket)){
 
-                sendBroadcastMessage(new Message(MessageType.USER_ADDED, USER_NAME)); // sending a message to other users
+                 // creating a new connection
+                ConsoleHelper.writeMessage("Connection with port " + connection.getRemoteSocketAddress());
+                userName = serverHandshake(connection); // getting a user name
 
-                sendListOfUsers(connection, USER_NAME); // sending a user list to new user
+                sendBroadcastMessage(new Message(MessageType.USER_ADDED, userName)); // sending a message to other users
 
-                serverMainLoop(connection, USER_NAME); // getting messages from user
+                sendListOfUsers(connection, userName); // sending a user list to new user
+
+                serverMainLoop(connection, userName); // getting messages from user
 
             } catch (IOException e1) {
                 ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e1.getLocalizedMessage());
+
 
             } catch (ClassNotFoundException e2) {
                 ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e2.getLocalizedMessage());
 
             } finally {
-                if (!USER_NAME.isEmpty()  && connectionMap.containsKey(USER_NAME)) {
-                    connectionMap.remove(USER_NAME);
-                    sendBroadcastMessage(new Message(MessageType.USER_REMOVED, USER_NAME));
+                if (userName != null && !userName.isEmpty() && connectionMap.containsKey(userName)) {
+                    connectionMap.remove(userName);
+                    sendBroadcastMessage(new Message(MessageType.USER_REMOVED, userName));
 
                 }
-
+                ConsoleHelper.writeMessage("Connection was closed");
             }
-            ConsoleHelper.writeMessage("Connection was closed");
-
         }
     }
 }
