@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Rumata on 28.02.2017.
  */
-public class Client {
+public class Client extends Thread{
     protected Connection connection;
     private volatile boolean clientConnected = false;
 
@@ -48,7 +48,65 @@ public class Client {
         }
     }
 
+    public void run() {
+        {
+            SocketThread socketThread = getSocketThread();
+            socketThread.setDaemon(true);
+            socketThread.start();
+            try {
+                synchronized (this) {
+                    wait();
+                }
+            } catch (InterruptedException e) {
+                ConsoleHelper.writeMessage("Ошибка потока...");
+                System.exit(1);
+            }
+            if (clientConnected) {
+                ConsoleHelper.writeMessage("Соединение установлено. Для выхода наберите команду ‘exit’");
+                while (clientConnected) {
+                    String message = ConsoleHelper.readString();
+                    if (message.equalsIgnoreCase("exit")) {
+                        break;
+                    } else {
+                        if (shouldSendTextFromConsole()) {
+                            sendTextMessage(message);
+                        }
+                    }
+                }
+            } else {
+                ConsoleHelper.writeMessage("Произошла ошибка во время работы клиента.");
+            }
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.run();
+    }
 
     public class SocketThread extends Thread {
+        protected void processIncomingMessage(String message)
+        {
+            ConsoleHelper.writeMessage(message);
+        }
+
+        protected void informAboutAddingNewUser(String userName)
+        {
+            ConsoleHelper.writeMessage("User has enter the chat" + userName);
+        }
+
+        protected void informAboutDeletingNewUser(String userName)
+        {
+            ConsoleHelper.writeMessage("Ladies and Gentleman" + userName + "has left the building" );
+        }
+
+        protected void notifyConnectionStatusChanged(boolean clientConnected)
+        {
+            clientConnected = clientConnected;
+            Client.this.notify();
+        }
     }
+
+
 }
