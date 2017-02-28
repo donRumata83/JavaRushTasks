@@ -25,6 +25,7 @@ public class Connection implements Closeable{
         synchronized (out)
         {
             out.writeObject(message);
+            out.flush();
         }
     }
 
