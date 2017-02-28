@@ -5,10 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by Rumata on 17.02.2017.
+ * Created by Rumata on 28.02.2017.
  */
 public class ConsoleHelper {
-
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void writeMessage(String message) {
