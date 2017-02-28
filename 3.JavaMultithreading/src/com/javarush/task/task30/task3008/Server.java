@@ -10,31 +10,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Server {
     public static void main(String[] args) throws IOException {
+        ConsoleHelper.writeMessage("Input server port to start");
         int serverPort = ConsoleHelper.readInt();
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(serverPort);
+
+        try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
+            ConsoleHelper.writeMessage("Server starts");
+            while (true) {new Handler(serverSocket.accept()).start();}
+
         } catch (Exception e) {
             ConsoleHelper.writeMessage(e.getLocalizedMessage());
         }
-        ConsoleHelper.writeMessage("Server starts");
-        Socket socket;
-        Handler handler;
-        while (true) {
-            socket = null;
-            try {
-                socket = serverSocket.accept();
-            } catch (Exception e) {
-                serverSocket.close();
-                ConsoleHelper.writeMessage(e.getMessage());
-                break;
-            }
-            if (socket != null) {
-                handler = new Handler(socket);
-                handler.start();
-            }
 
-        }
     }
 
     private static Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
@@ -62,9 +48,9 @@ public class Server {
             while (true) {
                 connection.send(new Message(MessageType.NAME_REQUEST));
                 reply = connection.receive();
-                if (reply != null && reply.getType().equals(MessageType.USER_NAME)) {
+                if (reply.getType().equals(MessageType.USER_NAME)) {
                     name = reply.getData();
-                    if (name != null && !name.isEmpty() && !connectionMap.containsKey(name)) {
+                    if (!name.isEmpty() && !connectionMap.containsKey(name)) {
                         connectionMap.put(name, connection);
                         connection.send(new Message(MessageType.NAME_ACCEPTED));
                         return name;
@@ -74,12 +60,12 @@ public class Server {
         }
 
         private void sendListOfUsers(Connection connection, String userName) throws IOException {
-            if (connection != null && userName != null) {
+
                 for (String NAME_IN_MAP : connectionMap.keySet()) {
-                    if (!userName.equals(NAME_IN_MAP) && NAME_IN_MAP != null)
+                    if (!userName.equals(NAME_IN_MAP))
                         connection.send(new Message(MessageType.USER_ADDED, NAME_IN_MAP));
                 }
-            }
+
         }
 
         private void serverMainLoop(Connection connection, String userName) throws IOException, ClassNotFoundException {
@@ -97,13 +83,13 @@ public class Server {
 
         public void run() {
             ConsoleHelper.writeMessage("Established new connection with remote address " + socket.getRemoteSocketAddress());
-            String REMOTE_ADDRESS = socket.getRemoteSocketAddress().toString(); // getting remote address from client
+            String remoteAddress = socket.getRemoteSocketAddress().toString(); // getting remote address from client
             String userName = null;
 
 
-            try (Connection connection = new Connection(socket)){
+            try (Connection connection = new Connection(socket)) {
 
-                 // creating a new connection
+                // creating a new connection
                 ConsoleHelper.writeMessage("Connection with port " + connection.getRemoteSocketAddress());
                 userName = serverHandshake(connection); // getting a user name
 
@@ -113,15 +99,10 @@ public class Server {
 
                 serverMainLoop(connection, userName); // getting messages from user
 
-            } catch (IOException e1) {
-                ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e1.getLocalizedMessage());
-
-
-            } catch (ClassNotFoundException e2) {
-                ConsoleHelper.writeMessage("Exception with address" + REMOTE_ADDRESS + e2.getLocalizedMessage());
-
+            } catch (IOException | ClassNotFoundException e) {
+                ConsoleHelper.writeMessage("Exception with address" + remoteAddress + e.getLocalizedMessage());
             } finally {
-                if (userName != null && !userName.isEmpty() && connectionMap.containsKey(userName)) {
+                if (userName != null) {
                     connectionMap.remove(userName);
                     sendBroadcastMessage(new Message(MessageType.USER_REMOVED, userName));
 
