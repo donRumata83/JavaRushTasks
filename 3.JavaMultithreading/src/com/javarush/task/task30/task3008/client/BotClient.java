@@ -40,48 +40,47 @@ public class BotClient extends Client {
 
         @Override
         protected void processIncomingMessage(String message) {
-            ConsoleHelper.writeMessage(message);
+            if (message != null) {
+                ConsoleHelper.writeMessage(message);
+                SimpleDateFormat format = null;
+                if (message.contains(": ")) {
+                    String[] massiv = message.split(": ");
+                    if (massiv.length == 2 && massiv[1] != null) {
+                        String name = massiv[0];
+                        String text = massiv[1];
+                        switch (text) {
+                            case "дата":
+                                format = new SimpleDateFormat("d.MM.YYYY");
+                                break;
+                            case "день":
+                                format = new SimpleDateFormat("d");
+                                break;
+                            case "месяц":
+                                format = new SimpleDateFormat("MMMM");
+                                break;
+                            case "год":
+                                format = new SimpleDateFormat("YYYY");
+                                break;
+                            case "время":
+                                format = new SimpleDateFormat("H:mm:ss");
+                                break;
+                            case "час":
+                                format = new SimpleDateFormat("H");
+                                break;
+                            case "минуты":
+                                format = new SimpleDateFormat("m");
+                                break;
+                            case "секунды":
+                                format = new SimpleDateFormat("s");
+                                break;
 
-
-            SimpleDateFormat format = null;
-            if (message.contains(":")) {
-                String[] massiv = message.split(":");
-                if (massiv.length == 2) {
-                    String name = massiv[0].trim();
-                    String text = massiv[1].trim().toLowerCase();
-                    switch (text) {
-                        case "дата":
-                            format = new SimpleDateFormat("d.MM.YYYY");
-                            break;
-                        case "день":
-                            format = new SimpleDateFormat("d");
-                            break;
-                        case "месяц":
-                            format = new SimpleDateFormat("MMMM");
-                            break;
-                        case "год":
-                            format = new SimpleDateFormat("YYYY");
-                            break;
-                        case "время":
-                            format = new SimpleDateFormat("H:mm:ss");
-                            break;
-                        case "час":
-                            format = new SimpleDateFormat("H");
-                            break;
-                        case "минуты":
-                            format = new SimpleDateFormat("m");
-                            break;
-                        case "секунды":
-                            format = new SimpleDateFormat("s");
-                            break;
-                        default:
-                            ConsoleHelper.writeMessage("Can't understand your message. Try again");
-                    }
-                    if (format != null) {
-                        sendTextMessage(String.format("Информация для %s: %s", name, format.format(Calendar.getInstance().getTime())));
+                        }
+                        if (format != null) {
+                            sendTextMessage(String.format("Информация для %s: %s", name, format.format(Calendar.getInstance().getTime())));
+                        }
                     }
                 }
-            } else ConsoleHelper.writeMessage("Can't understand your message. Try again");
+            }
         }
     }
 }
