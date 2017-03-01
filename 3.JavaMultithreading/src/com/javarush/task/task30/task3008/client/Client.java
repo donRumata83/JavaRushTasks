@@ -6,10 +6,9 @@ import com.javarush.task.task30.task3008.Message;
 import com.javarush.task.task30.task3008.MessageType;
 
 import java.io.IOException;
+import java.net.Socket;
 
-/**
- * Created by Rumata on 28.02.2017.
- */
+
 public class Client extends Thread {
     protected Connection connection;
     private volatile boolean clientConnected = false;
@@ -22,12 +21,12 @@ public class Client extends Thread {
     }
 
     protected int getServerPort() {
-        ConsoleHelper.writeMessage("Enter server port");
+        ConsoleHelper.writeMessage("Enter server port:");
         return ConsoleHelper.readInt();
     }
 
     protected String getUserName() {
-        ConsoleHelper.writeMessage("Enter your Name for access to chat room");
+        ConsoleHelper.writeMessage("Enter your Name for access to chat room:");
         return ConsoleHelper.readString();
     }
 
@@ -91,11 +90,11 @@ public class Client extends Thread {
         }
 
         protected void informAboutAddingNewUser(String userName) {
-            ConsoleHelper.writeMessage("User has enter the chat" + userName);
+            ConsoleHelper.writeMessage("User has enter the chat " + userName);
         }
 
         protected void informAboutDeletingNewUser(String userName) {
-            ConsoleHelper.writeMessage("Ladies and Gentleman" + userName + "has left the building");
+            ConsoleHelper.writeMessage("Ladies and Gentleman " + userName + " has left the building");
         }
 
         protected void notifyConnectionStatusChanged(boolean clientConnected) {
@@ -145,6 +144,21 @@ public class Client extends Thread {
             }
             throw new IOException("Unexpected MessageType");
 
+        }
+
+        public void run()
+        {
+            String serverAddress = getServerAddress();
+            int serverPort = getServerPort();
+            try {
+                Socket socket = new Socket(serverAddress,serverPort);
+                connection = new Connection(socket);
+                clientHandshake();
+                clientMainLoop();
+
+            } catch (IOException  | ClassNotFoundException e) {
+                notifyConnectionStatusChanged(false);
+            }
         }
     }
 

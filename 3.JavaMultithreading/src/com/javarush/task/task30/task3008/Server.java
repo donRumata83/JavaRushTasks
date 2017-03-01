@@ -6,14 +6,12 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Rumata on 28.02.2017.
- */
+
 public class Server {
     private static Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
-        ConsoleHelper.writeMessage("Input server port:");
+        ConsoleHelper.writeMessage("Input server port: ");
         try (ServerSocket serverSocket = new ServerSocket(ConsoleHelper.readInt())) {
             ConsoleHelper.writeMessage("Server started...");
             while (true) {
@@ -33,15 +31,14 @@ public class Server {
 
         @Override
         public void run() {
-//            SocketAddress socketAddress = null;
+
             if (socket != null && socket.getRemoteSocketAddress() != null) {
                 ConsoleHelper.writeMessage("Established a new connection to a remote socket address: " + socket.getRemoteSocketAddress());
             }
             String userName = null;
-//            String errorMessage = "An exchange of data error to a remote socket address: "; //+ socketAddress;
+
             try (Connection connection = new Connection(socket)) {
-//                SocketAddress socketAddress = connection.getRemoteSocketAddress();
-//                ConsoleHelper.writeMessage("Established a new connection to a remote socket address: " + connection.getRemoteSocketAddress());
+
                 userName = serverHandshake(connection);
                 sendBroadcastMessage(new Message(MessageType.USER_ADDED, userName));
                 sendListOfUsers(connection, userName);
@@ -61,9 +58,9 @@ public class Server {
             while (true) {
                 connection.send(new Message(MessageType.NAME_REQUEST));
                 Message answer = connection.receive();
-//                if (answer != null && answer.getType() == MessageType.USER_NAME) {
+
                 if (answer.getType() == MessageType.USER_NAME) {
-//                    if (!answer.getData().equals("") && answer.getData() != null) {
+
                     if (!answer.getData().isEmpty()) {
                         if (!connectionMap.containsKey(answer.getData())) {
                             connectionMap.put(answer.getData(), connection);

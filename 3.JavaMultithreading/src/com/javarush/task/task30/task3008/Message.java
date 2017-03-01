@@ -2,9 +2,7 @@ package com.javarush.task.task30.task3008;
 
 import java.io.Serializable;
 
-/**
- * Created by Rumata on 28.02.2017.
- */
+
 public class Message implements Serializable {
     private final MessageType type;
     private final String data;
