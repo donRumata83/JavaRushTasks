@@ -109,20 +109,16 @@ public class Client extends Thread {
             Message message;
 
             while (!clientConnected) {
-
-                message = connection.receive();
-                switch (message.getType()) {
-                    case NAME_REQUEST: {
-                        connection.send(new Message(MessageType.USER_NAME, getUserName()));
-                        break;
-                    }
-                    case NAME_ACCEPTED: {
-                        notifyConnectionStatusChanged(true);
-                        break;
-                    }
-                    default:
-                        throw new IOException("Unexpected MessageType");
+                try {
+                    message = connection.receive();
+                } catch (ClassNotFoundException e) {
+                    throw new IOException("Unexpected MessageType");
                 }
+                if (message.getType() == MessageType.NAME_REQUEST) {
+                    connection.send(new Message(MessageType.USER_NAME, getUserName()));
+                } else {
+                    if (message.getType() == MessageType.NAME_ACCEPTED) {notifyConnectionStatusChanged(true);}
+                    else throw new IOException("Unexpected MessageType");}
 
             }
         }
@@ -132,29 +128,22 @@ public class Client extends Thread {
 
             while (true) {
 
-
-                message = connection.receive();
-                switch (message.getType()) {
-                    case TEXT: {
-                        processIncomingMessage(message.getData());
-                        break;
+                try {
+                    message = connection.receive();
+                } catch (Exception e) {
+                    break;
+                }
+                if (message.getType() == MessageType.TEXT) processIncomingMessage(message.getData());
+                else {
+                    if (message.getType() == MessageType.USER_ADDED) informAboutAddingNewUser(message.getData());
+                    else {
+                        if (message.getType() == MessageType.USER_REMOVED) informAboutDeletingNewUser(message.getData());
+                        else break;
                     }
-                    case USER_ADDED: {
-                        informAboutAddingNewUser(message.getData());
-                        break;
-                    }
-                    case USER_REMOVED: {
-                        informAboutDeletingNewUser(message.getData());
-                        break;
-                    }
-                    default:
-                        throw new IOException("Unexpected MessageType");
-
-
                 }
 
-
             }
+            throw new IOException("Unexpected MessageType");
 
         }
     }
