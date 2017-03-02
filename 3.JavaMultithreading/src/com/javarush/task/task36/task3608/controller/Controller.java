@@ -16,6 +16,7 @@ public class Controller {
 
     public void onShowAllUsers() {
         model.loadUsers();
+        usersView.refresh(model.getModelData());
     }
 
 
