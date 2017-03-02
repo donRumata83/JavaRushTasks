@@ -1,38 +1,144 @@
-<div class="wdghtml" taskKey="com.javarush.task.task36.task3608.big01">
-<h3>MVC (1)</h3>
-<p>Привет! Эта задача будет на паттерн <strong>MVC</strong> &#8212; <strong>Model-View-Controller</strong>.<br />
-Мы вместе построим архитектуру используя <strong>MVC</strong>. Разберись подробно, что и почему нужно реализовывать так, как я тебе покажу.<br />
-Прочти дополнительную литературу, которую дает профессор в конце уровня.<br />
-Тебя, скорее всего, на собеседовании спросят об этом паттерне либо дадут задание, в котором нужно будет его реализовать.</p>
-<p>Итак&#8230;<br />
-У тебя есть два пакета: bean, содержащий единственный класс <strong><span class="text-corporate">User</span></strong>, и <span class="text-corporate"><strong>dao</strong></span>,<br />
-в котором хранится эмуляция базы данных в пакете <strong><span class="text-red">mock</span></strong> и <strong><span class="text-red">UserDao</span></strong>. <strong><span class="text-red">UserDao</span></strong> &#8212; это уровень <strong>ДАО</strong>, т.е. уровень доступа к базе.<br />
-В нем размещают различные методы по <strong>сохранению</strong> и <strong>получению</strong> объектов из базы данных.<br />
-В реальном приложении строку <span class="text-neon">private DataSource dataSource = DataSource.getInstance()</span> не встретить.<br />
-Я реализовал <strong>DataSource</strong> в виде синглтона. В действительности, у тебя будет что-то такое:<br />
-<span class="text-neon">@Autowired</span><br />
-<span class="text-neon"> private DataSource dataSource;</span></p>
-<p>Фреймворк, которым ты будешь пользоваться, сам создаст объект базы данных и инициализирует поле <mark class="user">dataSource</mark>.</p>
-<p>Запомни, с <strong>ДАО</strong> уровнем работают сервисы. Никакие другие классы в <strong>ДАО</strong> не лезут. В сервисах описана бизнес логика.<br />
-Сервисы забирают данные из базы используя <strong>ДАО</strong>, обрабатывают их и отдают тому, кто данные запросил.<br />
-Однако не все данные хранятся в базе. Например, залогиненый пользователь будет храниться в специальном объекте &#8212; Модели.<br />
-Объект, который содержит в себе данные, необходимые для отображения информации на клиенте, называется Моделью.<br />
-Также этот объект Модель содержит ссылки на все необходимые сервисы.<br />
-Если данных для отображения очень много, то их выделяют в отдельный объект.</p>
-<p>Напишем приложение, которое будет показывать список пользователей и что-то делать с ними, например, обновлять их данные и удалять.</p>
-<p>1. Создай пакет <strong><span class="text-red">model</span></strong>, в котором создай класс <span class="text-corporate"><strong>ModelData</strong></span>.<br />
-<span class="text-corporate"><strong>ModelData</strong></span> &#8212; это объект, который будет хранить необходимые данные для отображения на клиенте.<br />
-Создай поле с геттером и сеттером <span class="text-red"><strong>List</strong>&lt;User&gt; users</span> &#8212; это будет список пользователей для отображения.</p>
-<p>2. Используя любую модель должна быть возможность получить все необходимые данные для отображения. Поэтому в пакете <strong><span class="text-red">model</span></strong> создай интерфейс <strong><span class="text-yellow">Model</span></strong>, который должен содержать метод <mark>ModelData getModelData()</mark>.</p>
-<p>3. В пакете model создай класс <strong><span class="text-corporate">FakeModel</span></strong>, реализующий <strong><span class="text-yellow">Model</span></strong>. Он нам понадобится на начальном этапе.<br />
-В нем создай поле <span class="text-corporate"><strong>ModelData</strong></span> <span class="text-corporate">modelData</span>, которое инициализируй объектом.</p>
-<p>4. В интерфейсе <strong><span class="text-yellow">Model</span></strong> создай метод <mark>void loadUsers()</mark>.<br />
-Реализуй его в <mark>FakeModel</mark>: инициализируй список пользователей <strong><span class="text-red">modelData</span></strong> любыми данными. Они не влияют на тестирование.</p>
-<p><strong>У меня такие данные:</strong><br />
-<span class="text-neon">User{name=&#8217;A&#8217;, id=1, level=1}</span><br />
-<span class="text-neon"> User{name=&#8217;B&#8217;, id=2, level=1}</span></p>
-<p>Думаю, ты помнишь, что все методы интерфейса являются <strong>public</strong>-ами, поэтому модификатор указывать не нужно.<br />
-Программисты часто мОкают данные на начальном этапе. Получение реальных данных реализуется на последних этапах.<br />
-<mark class="neon">Мокать</mark> &#8212; это подменять реальные объекты на хардкоженные, тестовые данные.</p>
+taskKey="com.javarush.task.task36.task3608.big09"
 
-</div>
+MVC (9)
+
+Это последнее задание по MVC.
+
+1. Следуя принципу MVC аналогично реализации предыдущих методов сделай следующее:
+напиши логику обновления пользователя. После обновления должен отображаться список пользователей.
+Распредели методы по классам MVC, используя следующие сигнатуры публичных методов:
+void fireEventUserChanged(String name, long id, int level)
+void onUserChange(String name, long id, int level)
+void changeUserData(String name, long id, int level)
+где name и level - это новые значения для пользователя с выбранным id.
+Примечание: метод, который ты собираешься добавить в Вью нужно добавить в EditUserView.
+
+2. Добавь в main вызов fireEventUserChanged перед вызовом метода fireEventShowDeletedUsers().
+
+3. Добавь в интерфейс Model метод, который ты поместил в Модель, реализуй его в FakeModel: выброси UnsupportedOperationException.
+
+
+MVC (8)
+
+1. Следуя принципу MVC аналогично реализации предыдущих методов сделай следующее:
+напиши логику удаления пользователя. После удаления должен отображаться список пользователей.
+Распредели методы по классам MVC, используя следующие сигнатуры публичных методов:
+void fireEventUserDeleted(long id)
+void onUserDelete(long id)
+void deleteUserById(long id)
+Примечание: метод, который ты собираешься добавить в Вью нужно добавить в EditUserView.
+
+2. Добавь в main вызов fireEventUserDeleted(124L) перед вызовом метода fireEventShowDeletedUsers().
+
+3. Выполни рефакторинг класса MainModel. Теперь, когда есть удаленные пользователи, часть методов стала работать неправильно.
+Почти во всех методах, где требуется список пользователей, нужно работать только с активными(живыми) пользователями.
+Вынеси в отдельный приватный метод List<User> getAllUsers() получение списка всех пользователей.
+Фильтрация активных пользователей у тебя уже есть - метод List<User> filterOnlyActiveUsers(List<User> allUsers).
+Отрефактори все методы, которые используют список пользователей. Они должны использовать список живых пользователей.
+
+4. Добавь в интерфейс Model метод, который ты поместил в Модель, реализуй его в FakeModel: выброси UnsupportedOperationException.
+
+
+
+MVC (7)
+
+1. Распредели методы по классам MVC:
+
+public void onOpenUserEditForm(long userId) {
+...loadUserById(userId);
+...refresh(...getModelData());
+}
+
+public void fireEventOpenUserEditForm(long id) {
+...onOpenUserEditForm(id);
+}
+
+public void loadUserById(long userId) {
+User user = userService.getUsersById(userId);
+...setActiveUser(user);
+}
+
+!!!! Пользователь видит Вью со списком пользователей, нажимает на одного из них, запрос идет на сервер,
+выгребаем новые данные и отображаем другую Вью, которая относится к одному выбранному пользователю.
+Учти это при реализации этого задания.
+
+2. Добавь в метод main открытие формы редактирования для пользователя с id=126 перед вызовом метода fireEventShowDeletedUsers().
+
+3. Добавь в интерфейс Model метод, который ты поместил в Модель, реализуй его в FakeModel: выброси UnsupportedOperationException.
+
+
+
+MVC (6)
+
+Функционал отображения удаленных пользователей есть, а самих таких пользователей нет. Давай это исправим.
+Давай сделаем новую Вью, которая будет отвечать за редактирование одного конкретного пользователя.
+UsersView отображает список пользователей.
+EditUserView будет отображать данные о редактировании конкретного пользователя.
+Для этого нам сначала нужен этот выбранный пользователь.
+Как и любые данные его поместим в ModelData.
+
+1. Создай в ModelData поле User activeUser с геттером и сеттером (Alt+Insert -> Getter and Setter).
+
+2. Аналогично UsersView создай EditUserView.
+Логика метода refresh:
+2.1. Вывести в консоль "User to be edited:".
+2.2. С новой строки вывести табуляцию и активного пользователя.
+2.3. С новой строки вывести разделитель "===================================================".
+
+3. Создай в контроллере поле EditUserView editUserView с сеттером.
+
+Когда наши данные выводятся в консоль, то совсем не понятно, список каких пользователей - удаленных или нет - выводится.
+Давай сделаем так, чтобы Вью отображала эту информацию. Все данные для отображения хранятся в Моделе. Поэтому:
+4. создай в ModelData поле boolean displayDeletedUserList с геттером и сеттером.
+
+5. Измени метод refresh в UsersView так, чтобы он отображал "All users:" либо "All deleted users:"
+в зависимости от того, какие пользователи находятся в списке. Добавь в необходимые методы модели изменение displayDeletedUserList.
+
+
+
+MVC (5)
+
+В сервисе есть метод, который возвращает всех удаленных пользователей. Давай их отобразим.
+
+1. Распредели методы по классам MVC:
+
+public void fireEventShowDeletedUsers() {
+...onShowAllDeletedUsers();
+}
+
+public void onShowAllDeletedUsers() {
+...loadDeletedUsers();
+}
+
+public void loadDeletedUsers() {
+List<User> users = userService.getAllDeletedUsers();
+}
+
+Не забудь, что данные, полученные с сервера, необходимо положить в ModelData. А потом обновить view.
+Добавь это самостоятельно в нужные методы.
+
+2. Добавь в Solution.main вызов нового метода, который ты поместил в view.
+
+3. Добавь в интерфейс Model метод, который ты поместил в Модель, реализуй его в FakeModel: выброси UnsupportedOperationException.
+
+
+
+MVC (4)
+
+Пора заменять нашу фейковую Модель на реальную, которая будет получать данные из DataSource.
+В пакет model.service я добавил сервис для работы с пользователями.
+Также в корне этой задачи ты найдешь утильный класс Util.
+
+1. Аналогично FakeModel создай модель MainModel.
+
+2. Т.к. Модель обращается к сервисам, то в MainModel создай поле UserService userService, инициализируй объектом.
+
+3. Реализуй логику метода loadUsers:
+3.1. Достань всех пользователей между 1 и 100 уровнями. (Метод getUsersBetweenLevels(1, 100)).
+3.2. Положи всех пользователей в modelData.
+
+4. Обнови Solution.main: замени FakeModel на MainModel.
+Преимущества MVC в том, что в любой момент времени легко можно заменить любую часть паттерна.
+
+
+

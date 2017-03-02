@@ -1,6 +1,7 @@
 package com.javarush.task.task26.task2611;
 
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +24,7 @@ public class Solution {
 
         executorService.shutdownNow();
         //finally 5 lines have to be printed
+
 
     }
 }
