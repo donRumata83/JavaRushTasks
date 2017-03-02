@@ -13,12 +13,12 @@ public class ModelData {
     private User activeUser;
     private boolean displayDeletedUserList;
 
-    public boolean isDisplayDeletedUserList() {
-        return displayDeletedUserList;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setDisplayDeletedUserList(boolean displayDeletedUserList) {
-        this.displayDeletedUserList = displayDeletedUserList;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public User getActiveUser() {
@@ -29,11 +29,11 @@ public class ModelData {
         this.activeUser = activeUser;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public boolean isDisplayDeletedUserList() {
+        return displayDeletedUserList;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setDisplayDeletedUserList(boolean displayDeletedUserList) {
+        this.displayDeletedUserList = displayDeletedUserList;
     }
 }
