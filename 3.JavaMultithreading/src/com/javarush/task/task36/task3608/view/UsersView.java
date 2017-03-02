@@ -22,7 +22,7 @@ public class UsersView implements View {
 
     @Override
     public void setController(Controller controller) {
-
+        this.controller = controller;
     }
     public void fireEventShowAllUsers() {controller.onShowAllUsers();}
 
