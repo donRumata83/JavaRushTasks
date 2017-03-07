@@ -1,0 +1,9 @@
+taskKey="com.javarush.task.task27.task2711"
+
+CountDownLatch
+
+Дана стандартная реализация методологии wait-notify.
+Почитай про CountDownLatch и перепиши тело метода someMethod используя поле latch.
+Весь лишний код удали из класса.
+
+
