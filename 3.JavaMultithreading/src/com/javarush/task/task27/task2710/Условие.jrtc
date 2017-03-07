@@ -1,0 +1,9 @@
+taskKey="com.javarush.task.task27.task2710"
+
+Расставьте wait-notify
+
+Расставь wait-notify.
+Пример вывода:
+Thread-0 MailServer has got: [Person [Thread-1] has written an email 'AAA'] in 1001 ms after start
+
+
