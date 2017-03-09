@@ -25,16 +25,18 @@ public class FileManager {
     }
 
     private void collectFileList(Path path) throws IOException {
-        if (Files.isRegularFile(path)) {
-            fileList.add(path.getFileName());
-        } else {
-            if (Files.isDirectory(path)) {
-                try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
-                    for (Path path1 : stream) {
-                        collectFileList(path1);
+        if (path != null) {
+            if (Files.isRegularFile(path)) {
+                fileList.add(path.getFileName());
+            } else {
+                if (Files.isDirectory(path)) {
+                    try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+                        for (Path path1 : stream) {
+                            collectFileList(path1);
+                        }
                     }
-                }
 
+                }
             }
         }
     }
