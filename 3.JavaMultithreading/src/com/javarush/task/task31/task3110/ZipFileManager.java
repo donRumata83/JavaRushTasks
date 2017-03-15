@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,26 +138,32 @@ public class ZipFileManager {
         if (!Files.isRegularFile(zipFile)) {
             throw new WrongZipFileException();
         }
-        Path tempFile = Files.createTempFile(Paths.get("c:/"),"tempArchive", ".zip");
+        Path tempFile = Files.createTempFile(null,null);
 
         try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile));
                         ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(tempFile)))
         {
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-            while (zipEntry != null)
+            ZipEntry zipEntry;
+            while ((zipEntry = zipInputStream.getNextEntry()) != null)
             {
-                if (pathList.contains(Paths.get(zipEntry.getName()))) ConsoleHelper.writeMessage("Файл " + zipEntry.getName() + " удален из архива.");
-                else {
-                    Path parent = Paths.get(zipEntry.getName()).getParent();
-                    Path fileName = Paths.get(zipEntry.getName());
-                    addNewZipEntry(zipOutputStream, parent, fileName);
+                String fileName = zipEntry.getName();
 
+                if (pathList.contains(Paths.get(fileName)))
+                {
+                    ConsoleHelper.writeMessage("удалили файл " + fileName);
+                } else
+                {
+                    // переписываем во временный файл
+                    ZipEntry entry = new ZipEntry(fileName);
+                    zipOutputStream.putNextEntry(entry);
                     copyData(zipInputStream, zipOutputStream);
+                    zipOutputStream.closeEntry();
                     zipInputStream.closeEntry();
                 }
             }
+
         }
-        Files.move(tempFile, zipFile);
+        Files.move(tempFile, zipFile, StandardCopyOption.REPLACE_EXISTING);
 
     }
 
