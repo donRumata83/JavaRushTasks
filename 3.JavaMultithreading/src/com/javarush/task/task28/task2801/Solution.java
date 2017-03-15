@@ -22,12 +22,13 @@ public class Solution {
     }
 
     public static void switchTest(Enum obj) {
-        switch (obj) {
+
+        switch (obj.getClass().getSimpleName()) {
             case "E1" :
-                System.out.println(obj);
+                System.out.println("it's " + obj.getClass().getSimpleName() + "."+ obj);
                 break;
-            case :
-                System.out.println(obj);
+            case "E2" :
+                System.out.println("it's " + obj.getClass().getSimpleName() + "."+ obj);
                 break;
             default:
                 System.out.println("undefined");
