@@ -43,15 +43,16 @@ public class Solution {
     public static class AmigoThreadFactory implements ThreadFactory{
         AtomicInteger integer=new AtomicInteger(0);
         AtomicInteger factoryNum=new AtomicInteger(0);
-        AtomicInteger factoryCount=new AtomicInteger(0);
+        static AtomicInteger factoryCount=new AtomicInteger(0);
         public AmigoThreadFactory() {
             factoryNum.set(factoryCount.incrementAndGet());
         }
         @Override
         public Thread newThread(Runnable r)
         {
-            Thread thread=new Thread(r);
-
+            Thread thread = new Thread(r);
+            thread.setDaemon(false);
+            thread.setPriority(Thread.NORM_PRIORITY);
             thread.setName(thread.getThreadGroup().getName()+"-pool-"+factoryNum+"-thread-"+integer.incrementAndGet());
             return thread;
         }
