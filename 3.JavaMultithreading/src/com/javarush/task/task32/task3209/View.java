@@ -19,15 +19,25 @@ public class View extends JFrame implements ActionListener {
     private JTextPane htmlTextPane = new JTextPane();
     private JEditorPane plainTextPane = new JEditorPane();
 
+    // конструктор
+    public View() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            ExceptionHandler.log(e);
+        }
 
+    }
+
+    //Геттер и сеттер для контроллера
     public Controller getController() {
         return controller;
     }
-
     public void setController(Controller controller) {
         this.controller = controller;
     }
 
+    // Инициализация всего окна
     public void init() {
         initGui();
         this.addWindowListener(new FrameListener(this));
@@ -35,9 +45,23 @@ public class View extends JFrame implements ActionListener {
 
     }
 
+    // Инициализирует кнопки меня в окне
     public void initMenuBar() {
+        JMenuBar jMenuBar = new JMenuBar();
+
+        MenuHelper.initFileMenu(this, jMenuBar); //file
+        MenuHelper.initEditMenu(this, jMenuBar); // edit
+        MenuHelper.initStyleMenu(this, jMenuBar); //style
+        MenuHelper.initAlignMenu(this, jMenuBar); // align
+        MenuHelper.initColorMenu(this, jMenuBar); //colorFont
+        MenuHelper.initFontMenu(this, jMenuBar); // fonts
+        MenuHelper.initHelpMenu(this, jMenuBar); //help
+
+        getContentPane().add(jMenuBar, BorderLayout.NORTH);
+
     }
 
+    // Инициализация закладок окна. ХТМЛ/текст
     public void initEditor() {
         htmlTextPane.setContentType("text/html");
 
@@ -45,11 +69,12 @@ public class View extends JFrame implements ActionListener {
 
         tabbedPane.addTab("Текст", new JScrollPane(plainTextPane));
 
-        tabbedPane.setPreferredSize(new Dimension(100,100));
+        tabbedPane.setPreferredSize(new Dimension(100, 100));
         tabbedPane.addChangeListener(new TabbedPaneChangeListener(this));
         this.getContentPane().add(tabbedPane, BorderLayout.CENTER);
     }
 
+    // Инициализация всего ГУИ
     public void initGui() {
         initMenuBar();
         initEditor();
@@ -61,12 +86,14 @@ public class View extends JFrame implements ActionListener {
 
     }
 
+    // Выход  из системы, пробрасывет закрытие в контроллер
     public void exit() {
         controller.exit();
     }
 
     public void selectedTabChanged() {
     }
+
 
 
 }
