@@ -135,6 +135,24 @@ public class View extends JFrame implements ActionListener {
     }
 
     //должен сбрасывать все правки в менеджере
-    public void resetUndo()
-    {undoManager.discardAllEdits();}
+    public void resetUndo() { undoManager.discardAllEdits(); }
+
+    //должен возвращать true, если выбрана вкладка, отображающая html в панели вкладок
+    public boolean isHtmlTabSelected() {return tabbedPane.getSelectedIndex() == 0;}
+
+    // Выбирать html вкладку
+    public void selectHtmlTab() {
+        tabbedPane.setSelectedIndex(0);
+        resetUndo();
+
+    }
+
+    // обновляет html страницу
+    public  void update() {
+        htmlTextPane.setDocument(controller.getDocument());
+        }
+
+    public void showAbout() {
+        JOptionPane.showMessageDialog(getContentPane(), "It hard to be God", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
