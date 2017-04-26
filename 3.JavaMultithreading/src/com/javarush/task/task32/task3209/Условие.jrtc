@@ -1,4 +1,43 @@
-taskKey="com.javarush.task.task32.task3209.big10"
+taskKey="com.javarush.task.task32.task3209.big11"
+
+HTML Editor (11)
+
+11.1.	Добавь в представление поле UndoManager undoManager. Разберись для чего
+используется этот класс. Проинициализируй поле класса новым объектом.
+11.2.	Добавь класс UndoListener реализующий интерфейс UndoableEditListener в пакет
+listeners. Этот класс будет следить за правками, которые можно отменить или вернуть.
+11.3.	Добавь в класс UndoListener:
+11.3.1.	Поле UndoManager undoManager.
+11.3.2.	Конструктор, который принимает UndoManager и инициализирует поле класса.
+11.3.3.	Метод undoableEditHappened(UndoableEditEvent e). Он должен из переданного
+события получать правку и добавлять ее в undoManager.
+11.4.	Добавь в представление поле UndoListener undoListener, проинициализируй его
+используя undoManager.
+11.5.	Добавь в представление методы:
+11.5.1.	void undo() - отменяет последнее действие. Реализуй его используя undoManager.
+Метод не должен кидать исключений, логируй их.
+11.5.2.	void redo() - возвращает ранее отмененное действие. Реализуй его по аналогии с
+предыдущим пунктом.
+11.5.3.	Реализуй методы boolean canUndo() и boolean canRedo() используя undoManager.
+11.5.4.	Реализуй геттер для undoListener.
+11.5.5.	Добавь и реализуй метод void resetUndo(), который должен сбрасывать все правки в
+менеджере undoManager.
+
+
+Требования:
+1.	Класс View должен содержать приватное поле UndoManager undoManager, которое должно быть сразу проинициализовано.
+2.	Класс View должен содержать приватное поле UndoListener undoListener, которое должно быть сразу проинициализовано через поле undoManager.
+3.	Класс View должен содержать геттер к полю UndoListener undoListener.
+4.	Класс View должен содержать public void метод undo().
+5.	Класс View должен содержать public void метод redo().
+6.	Реализация метода canUndo() класса View должна использовать undoManager.
+7.	Реализация метода canRedo() класса View должна использовать undoManager.
+8.	Класс View должен содержать public void метод resetUndo(), который должен сбрасывать все правки в менеджере undoManager.
+9.	Класс UndoListener должен быть создан в отдельном файле.
+10.	Класс UndoListener должен содержать приватное поле UndoManager undoManager.
+11.	Конструктор UndoListener(UndoManager undoManager) должен корректно инициализировать поле undoManager.
+12.	Метод undoableEditHappened(UndoableEditEvent e) в классе UndoListener должен из переданного события получать правку и добавлять ее в undoManager.
+
 
 HTML Editor (10)
 
@@ -26,15 +65,6 @@ boolean canUndo(). Пока у представления нет такого м
 canRedo() в представление.
 Запусти программу и убедись, что пункты меню Отменить и Вернуть недоступны.
 
-
-Требования:
-1.	Класс UndoMenuListener должен содержать поле представления View view.
-2.	Класс UndoMenuListener должен содержать поле JMenuItem undoMenuItem.
-3.	Класс UndoMenuListener должен содержать поле JMenuItem redoMenuItem.
-4.	Конструктор UndoMenuListener(View view, JMenuItem undoMenuItem, JMenuItem redoMenuItem) должен корректно инициализировать поля класса.
-5.	Класс View должен содержать public boolean метод canUndo(), возвращающий false.
-6.	Класс View должен содержать public boolean метод canRedo(), возвращающий false.
-7.	Метод menuSelected(MenuEvent menuEvent) должен делать доступными или не доступными пункты меню undoMenuItem и redoMenuItem.
 
 
 HTML Editor (9)
@@ -185,23 +215,6 @@ HTML Editor (6)
 getContentPane(), его реализация унаследовалась от JFrame.
 После запуска приложения можно будет увидеть текущие результаты: две независимые
 закладки (HTML и Текст), в каждой из которых можно набирать свой текст.
-
-
-
-HTML Editor (5)
-
-5.1.	Объяви класс TabbedPaneChangeListener реализующий интерфейс ChangeListener в пакете
-listeners. Этот класс будет слушать и обрабатывать изменения состояния панели вкладок.
-Реализуй в этом классе:
-5.1.1.	Конструктор, принимающий представление в виде параметра и сохраняющий во
-внутреннее поле view класса.
-5.1.2.	Переопредели метод из интерфейса ChangeListener, он должен вызывать метод
-selectedTabChanged() у представления. Последнего метода еще нет, сделай для него
-заглушку.
-5.2.	Объяви класс ExceptionHandler. Это будет наш обработчик исключительных ситуаций,
-который ты в дальнейшем сможешь переопределить. Пока добавь в него статический метод
-log(Exception e), который будет выводить в консоль краткое описание проблемы
-(используй метод toString у переданного исключения).
 
 
 

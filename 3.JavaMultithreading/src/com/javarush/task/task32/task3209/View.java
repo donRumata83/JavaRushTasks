@@ -2,8 +2,12 @@ package com.javarush.task.task32.task3209;
 
 import com.javarush.task.task32.task3209.listeners.FrameListener;
 import com.javarush.task.task32.task3209.listeners.TabbedPaneChangeListener;
+import com.javarush.task.task32.task3209.listeners.UndoListener;
 
 import javax.swing.*;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 
 import java.awt.*;
@@ -18,6 +22,8 @@ public class View extends JFrame implements ActionListener {
     private JTabbedPane tabbedPane = new JTabbedPane();
     private JTextPane htmlTextPane = new JTextPane();
     private JEditorPane plainTextPane = new JEditorPane();
+    private UndoManager undoManager = new UndoManager();
+    private UndoListener undoListener = new UndoListener(undoManager);
 
     // конструктор
     public View() {
@@ -33,6 +39,7 @@ public class View extends JFrame implements ActionListener {
     public Controller getController() {
         return controller;
     }
+
     public void setController(Controller controller) {
         this.controller = controller;
     }
@@ -95,8 +102,39 @@ public class View extends JFrame implements ActionListener {
     }
 
     // Проверка возможности отменить действие
-    public boolean canUndo() {return false;}
-    //Проверка возможности перейти на действие вперед
-    public boolean canRedo() {return  false;}
+    public boolean canUndo() {
+        return undoManager.canUndo();
+    }
 
+    //Проверка возможности перейти на действие вперед
+    public boolean canRedo() {
+        return undoManager.canRedo();
+    }
+
+    //отменяет последнее действие
+    public void undo() {
+        try {
+            undoManager.undo();
+        } catch (CannotUndoException e) {
+            ExceptionHandler.log(e);
+        }
+    }
+
+    //возвращает ранее отмененное действие
+    public void redo() {
+        try {
+            undoManager.redo();
+        } catch (CannotRedoException e) {
+            ExceptionHandler.log(e);
+        }
+    }
+
+    // геттер для слушателя изменений
+    public UndoListener getUndoListener() {
+        return undoListener;
+    }
+
+    //должен сбрасывать все правки в менеджере
+    public void resetUndo()
+    {undoManager.discardAllEdits();}
 }
