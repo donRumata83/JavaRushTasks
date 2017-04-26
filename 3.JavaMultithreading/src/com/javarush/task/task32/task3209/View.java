@@ -94,6 +94,9 @@ public class View extends JFrame implements ActionListener {
     public void selectedTabChanged() {
     }
 
-
+    // Проверка возможности отменить действие
+    public boolean canUndo() {return false;}
+    //Проверка возможности перейти на действие вперед
+    public boolean canRedo() {return  false;}
 
 }
