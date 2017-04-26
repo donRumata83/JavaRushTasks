@@ -9,8 +9,9 @@ import java.awt.event.ActionEvent;
  * Created by Rumata on 25.04.2017.
  */
 public class UndoAction extends AbstractAction {
+    private View view;
     public UndoAction(View view)
-    {}
+    {this.view = view;}
 
     @Override
     public void actionPerformed(ActionEvent e) {

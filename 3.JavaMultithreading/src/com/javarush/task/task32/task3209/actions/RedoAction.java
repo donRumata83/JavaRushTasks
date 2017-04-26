@@ -9,7 +9,8 @@ import java.awt.event.ActionEvent;
  * Created by Rumata on 25.04.2017.
  */
 public class RedoAction extends AbstractAction {
-    public RedoAction(View view) {}
+    private View view;
+    public RedoAction(View view) {this.view = view;}
 
     @Override
     public void actionPerformed(ActionEvent e) {
