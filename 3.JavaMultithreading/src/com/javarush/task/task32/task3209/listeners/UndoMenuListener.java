@@ -10,9 +10,15 @@ import javax.swing.event.MenuListener;
  * Created by Rumata on 25.04.2017.
  */
 public class UndoMenuListener implements MenuListener {
+    private View view;
+    private JMenuItem undoMenuItem;
+    private JMenuItem redoMenuItem;
+
+    // Проверка доступности пунктов перед показом меню
     @Override
     public void menuSelected(MenuEvent e) {
-
+        undoMenuItem.setEnabled(view.canUndo());
+        redoMenuItem.setEnabled(view.canRedo());
     }
 
     @Override
@@ -25,5 +31,9 @@ public class UndoMenuListener implements MenuListener {
 
     }
 
-    public UndoMenuListener(View view, JMenuItem undoMenuItem, JMenuItem redoMenuItem) {}
+    public UndoMenuListener(View view, JMenuItem undoMenuItem, JMenuItem redoMenuItem) {
+        this.view = view;
+        this.undoMenuItem = undoMenuItem;
+        this.redoMenuItem = redoMenuItem;
+    }
 }
