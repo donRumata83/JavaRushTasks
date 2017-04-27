@@ -6,6 +6,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 
 public class Controller {
@@ -51,6 +52,8 @@ public class Controller {
         view.update();
     }
 
+
+    //записывает переданный текст с html тегами в документ document
     public void setPlainText(String text) {
         resetDocument();
         StringReader stringReader = new StringReader(text);
@@ -59,5 +62,14 @@ public class Controller {
         } catch (Exception e) {
             ExceptionHandler.log(e);
         }
+    }
+
+    // получает текст из документа со всеми html тегами.
+    public String getPlainText() {
+        StringWriter stringWriter = new StringWriter();
+        try {
+            new HTMLEditorKit().write(stringWriter, document, 0, document.getLength());
+        } catch (Exception e) {ExceptionHandler.log(e);}
+        return stringWriter.toString();
     }
 }

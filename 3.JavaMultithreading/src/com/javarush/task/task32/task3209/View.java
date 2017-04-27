@@ -99,7 +99,17 @@ public class View extends JFrame implements ActionListener {
     }
 
     public void selectedTabChanged() {
+        switch (tabbedPane.getSelectedIndex()) {
+            case 0:
+                controller.setPlainText(plainTextPane.getText());
+                break;
+            case 1:
+                plainTextPane.setText(controller.getPlainText());
+                break;
+        }
+        resetUndo();
     }
+
 
     // Проверка возможности отменить действие
     public boolean canUndo() {
@@ -135,10 +145,14 @@ public class View extends JFrame implements ActionListener {
     }
 
     //должен сбрасывать все правки в менеджере
-    public void resetUndo() { undoManager.discardAllEdits(); }
+    public void resetUndo() {
+        undoManager.discardAllEdits();
+    }
 
     //должен возвращать true, если выбрана вкладка, отображающая html в панели вкладок
-    public boolean isHtmlTabSelected() {return tabbedPane.getSelectedIndex() == 0;}
+    public boolean isHtmlTabSelected() {
+        return tabbedPane.getSelectedIndex() == 0;
+    }
 
     // Выбирать html вкладку
     public void selectHtmlTab() {
@@ -148,10 +162,11 @@ public class View extends JFrame implements ActionListener {
     }
 
     // обновляет html страницу
-    public  void update() {
+    public void update() {
         htmlTextPane.setDocument(controller.getDocument());
-        }
+    }
 
+    // "О программе"
     public void showAbout() {
         JOptionPane.showMessageDialog(getContentPane(), "It hard to be God", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
