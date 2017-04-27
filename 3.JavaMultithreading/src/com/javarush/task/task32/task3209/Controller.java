@@ -20,6 +20,7 @@ public class Controller {
     }
 
     public void init() {
+        createNewDocument();
     }
 
     public static void main(String[] args) {
@@ -74,7 +75,14 @@ public class Controller {
     }
 
     // Новый документ
-    public void createNewDocument(){}
+    public void createNewDocument(){
+        view.selectHtmlTab();
+        resetDocument();
+        view.setTitle("HTML редактор");
+        currentFile = null;
+        view.resetUndo();
+
+    }
 
     // открыть документ
     public void openDocument() {}
