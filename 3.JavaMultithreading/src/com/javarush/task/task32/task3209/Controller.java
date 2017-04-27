@@ -1,10 +1,10 @@
 package com.javarush.task.task32.task3209;
 
-import javax.swing.text.BadLocationException;
+
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import java.io.File;
-import java.io.IOException;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -72,4 +72,18 @@ public class Controller {
         } catch (Exception e) {ExceptionHandler.log(e);}
         return stringWriter.toString();
     }
+
+    // Новый документ
+    public void createNewDocument(){}
+
+    // открыть документ
+    public void openDocument() {}
+
+    //сохранить документ
+    public void saveDocument() {}
+
+    //сохранить документ как..
+    public void saveDocumentAs() {}
+
+
 }
