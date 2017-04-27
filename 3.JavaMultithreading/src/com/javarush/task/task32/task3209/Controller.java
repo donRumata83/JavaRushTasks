@@ -1,10 +1,12 @@
 package com.javarush.task.task32.task3209;
 
 
+import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import java.io.File;
 
+import java.io.FileWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -70,12 +72,14 @@ public class Controller {
         StringWriter stringWriter = new StringWriter();
         try {
             new HTMLEditorKit().write(stringWriter, document, 0, document.getLength());
-        } catch (Exception e) {ExceptionHandler.log(e);}
+        } catch (Exception e) {
+            ExceptionHandler.log(e);
+        }
         return stringWriter.toString();
     }
 
     // Новый документ
-    public void createNewDocument(){
+    public void createNewDocument() {
         view.selectHtmlTab();
         resetDocument();
         view.setTitle("HTML редактор");
@@ -85,13 +89,31 @@ public class Controller {
     }
 
     // открыть документ
-    public void openDocument() {}
+    public void openDocument() {
+    }
 
     //сохранить документ
-    public void saveDocument() {}
+    public void saveDocument() {
+
+    }
 
     //сохранить документ как..
-    public void saveDocumentAs() {}
+    public void saveDocumentAs() {
+        view.selectHtmlTab();
+        JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setFileFilter(new HTMLFileFilter());
+        int choose = jFileChooser.showSaveDialog(view);
+        if (choose == JFileChooser.APPROVE_OPTION) {
+            currentFile = jFileChooser.getSelectedFile();
+            view.setTitle(currentFile.getName());
+            try {
+                FileWriter fileWriter = new FileWriter(currentFile);
+                new HTMLEditorKit().write(fileWriter, document, 0, document.getLength());
+            } catch (Exception e) {
+                ExceptionHandler.log(e);
+            }
+        }
+    }
 
 
 }
