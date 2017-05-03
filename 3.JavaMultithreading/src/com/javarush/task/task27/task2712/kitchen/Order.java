@@ -6,9 +6,8 @@ import com.javarush.task.task27.task2712.Tablet;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by Rumata on 03.05.2017.
- */
+
+
 public class Order {
     protected List<Dish> dishes;
     private final Tablet tablet;

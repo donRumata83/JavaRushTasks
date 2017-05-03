@@ -23,14 +23,13 @@ public class ConsoleHelper {
     }
 
     public static List<Dish> getAllDishesForOrder() throws IOException {
-        writeMessage("Choose the dish from the list below");
+        writeMessage("Choose the dish from the list below. Print and \"Enter\" to choose");
         writeMessage(Dish.allDishesToString());
-        writeMessage("Print your order");
         List<Dish> order = new ArrayList<>();
         boolean notExit = true;
         String dishToOrder;
         while (notExit) {
-            writeMessage("Choose another dish, or \"exit\" to end ordering");
+            writeMessage("Choose dish, or \"exit\" to end ordering");
             dishToOrder = readString();
             switch (dishToOrder) {
                 case "Fish":
