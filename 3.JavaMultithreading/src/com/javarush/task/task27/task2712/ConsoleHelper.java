@@ -23,40 +23,34 @@ public class ConsoleHelper {
     }
 
     public static List<Dish> getAllDishesForOrder() throws IOException {
-        writeMessage("Choose the dish from the list below. Print and \"Enter\" to choose");
-        writeMessage(Dish.allDishesToString());
-        List<Dish> order = new ArrayList<>();
-        boolean notExit = true;
-        String dishToOrder;
-        while (notExit) {
-            writeMessage("Choose dish, or \"exit\" to end ordering");
-            dishToOrder = readString();
-            switch (dishToOrder) {
-                case "Fish":
-                    order.add(Dish.Fish);
-                    break;
-                case "Steak":
-                    order.add(Dish.Steak);
-                    break;
-                case "Soup":
-                    order.add(Dish.Soup);
-                    break;
-                case "Juice":
-                    order.add(Dish.Juice);
-                    break;
-                case "Water":
-                    order.add(Dish.Water);
-                    break;
-                case "exit":
-                    notExit = false;
-                    break;
-                default:
-                    writeMessage("No such dish in our restaurant");
-                    break;
+        List<Dish> dishes = new ArrayList<>();
+        ConsoleHelper.writeMessage("Выберите блюда. Для завершения наберите 'exit'.");
+        ConsoleHelper.writeMessage(Dish.allDishesToString());
+        while (true) {
+            String dishToOrder = readString();
+            if (dishToOrder.equalsIgnoreCase("exit")) {
+                break;
+            }
+//            try {
+//                dishes.add(Dish.valueOf(dishToOrder)); //?
+//            }
+//            catch (IllegalArgumentException e) {
+//                ConsoleHelper.writeMessage(dishToOrder + " is not detected");
+//            }
+            if(dishToOrder.isEmpty()){
+                writeMessage("Блюдо не выбрано");
+                continue;
+            }
+            boolean found = false;
+            for(Dish d : Dish.values())
+                if(d.name().equalsIgnoreCase(dishToOrder)) {
+                    dishes.add(d);
+                    found = true;
+                }
+            if(!found){
+                writeMessage("Нет такого блюда");
             }
         }
-
-
-        return order;
+        return dishes;
     }
 }
