@@ -4,20 +4,20 @@ package com.javarush.task.task27.task2712.ad;
  * Created by Rumata on 04.05.2017.
  */
 public class Advertisement {
-    private Object content;
-    private String name;
-    private long initialAmount;
-    private int hits;
-    private int duration;
-    private long amountPerOneDisplaying;
+    private Object content; //видео
+    private String name; //название
+    private long initialAmount; //начальная сумма, стоимость рекламы в копейках
+    private int hits; //количество оплаченных показов
+    private int duration; // продолжительность в секундах
+    private long amountPerOneDisplaying; //стоимость одного показа рекламного объявления в копейках
 
     public Advertisement(Object content, String name, long initialAmount, int hits, int duration) {
-        this.content = content; //видео
-        this.name = name; //название
-        this.initialAmount = initialAmount; //начальная сумма, стоимость рекламы в копейках
-        this.hits = hits; //количество оплаченных показов
-        this.duration = duration; // продолжительность в секундах
-        this.amountPerOneDisplaying = initialAmount/hits; //стоимость одного показа рекламного объявления в копейках
+        this.content = content;
+        this.name = name;
+        this.initialAmount = initialAmount;
+        this.hits = hits;
+        this.duration = duration;
+        this.amountPerOneDisplaying = initialAmount/hits;
     }
 
     public String getName() {
