@@ -1,7 +1,12 @@
 package com.javarush.task.task27.task2712.ad;
 
 
+import com.javarush.task.task27.task2712.ConsoleHelper;
+
 import java.util.ArrayList;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -16,7 +21,21 @@ public class AdvertisementManager {
     public void processVideos() {
         List<Advertisement> availableVideos = storage.list();
         if (availableVideos.isEmpty()) throw new NoVideoAvailableException();
-        List<Advertisement> result = getVideos(availableVideos, 0);
+        List<Advertisement> videoToBeShown = getVideos(availableVideos, 0);
+        if (videoToBeShown.isEmpty()) throw new NoVideoAvailableException();
+
+        Collections.sort(videoToBeShown, new Comparator<Advertisement>() {
+            @Override
+            public int compare(Advertisement o1, Advertisement o2) {
+                int result = Long.compare(o1.getAmountPerOneDisplaying(), o2.getAmountPerOneDisplaying());
+                if (result == 0) result = Long.compare(o1.getAmountPerOneDisplaying()/o1.getDuration(), o2.getAmountPerOneDisplaying()/o2.getDuration());
+                return result;
+            }
+        });
+        Collections.reverse(videoToBeShown);
+        for (Advertisement ad: videoToBeShown) {
+            ConsoleHelper.writeMessage(String.format("%s  is displaying... %d, %d", ad.getName(), ad.getAmountPerOneDisplaying(), ad.getAmountPerOneDisplaying()*1000/ad.getDuration()));
+        }
 
     }
 
@@ -25,7 +44,7 @@ public class AdvertisementManager {
         List<Advertisement> tmp;
         List<Advertisement> result = new ArrayList<>();
         int inListSummOfTime = summOfTime(inList);
-        int inListSummOfMoney = summOfListMoney(inList);
+
 
         Advertisement ad;
 
