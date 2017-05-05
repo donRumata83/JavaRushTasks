@@ -41,4 +41,8 @@ public class Advertisement {
     public String toString() {
         return name + " is displaying... " + getAmountPerOneDisplaying() + ", " + getAmountPerOneDisplaying()/duration*1000;
     }
+
+    public int getHits() {
+        return hits;
+    }
 }
