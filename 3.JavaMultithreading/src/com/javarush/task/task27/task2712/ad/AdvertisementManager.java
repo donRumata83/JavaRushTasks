@@ -29,13 +29,15 @@ public class AdvertisementManager {
             @Override
             public int compare(Advertisement o1, Advertisement o2) {
                 int result = Long.compare(o1.getAmountPerOneDisplaying(), o2.getAmountPerOneDisplaying());
-                if (result == 0) result = Long.compare(o1.getAmountPerOneDisplaying()/o1.getDuration(), o2.getAmountPerOneDisplaying()/o2.getDuration());
+                if (result == 0)
+                    result = Long.compare(o1.getAmountPerOneDisplaying() / o1.getDuration(), o2.getAmountPerOneDisplaying() / o2.getDuration());
                 return result;
             }
         });
         Collections.reverse(videoToBeShown);
-        for (Advertisement ad: videoToBeShown) {
-            ConsoleHelper.writeMessage(String.format("%s  is displaying... %d, %d", ad.getName(), ad.getAmountPerOneDisplaying(), ad.getAmountPerOneDisplaying()*1000/ad.getDuration()));
+        for (Advertisement ad : videoToBeShown) {
+            ConsoleHelper.writeMessage(String.format("%s  is displaying... %d, %d", ad.getName(), ad.getAmountPerOneDisplaying(), ad.getAmountPerOneDisplaying() * 1000 / ad.getDuration()));
+            ad.revalidate();
         }
 
     }
@@ -44,21 +46,21 @@ public class AdvertisementManager {
         List<Advertisement> storageList = storage.list();
         List<Advertisement> tmp;
         List<Advertisement> result = new ArrayList<>();
-        int inListSummOfTime = summOfTime(inList);
 
+        int timeLeft = timeSeconds - summOfTime(inList);
 
         Advertisement ad;
 
         for (int i = start; i < storageList.size(); i++) { // проходим по сторейдж массиву
             ad = storageList.get(i);
-            if (!inList.contains(ad) && ad.getHits() > 0 && (inListSummOfTime + ad.getDuration()) <= timeSeconds) {
+            if (!inList.contains(ad) && ad.getHits() > 0 && (ad.getDuration() <= timeLeft)) {
                 inList.add(ad);
-                tmp = getVideos(inList, i);
-                result = checkWhoBetter(result, tmp);
+                result = checkWhoBetter(inList, getVideos(inList, i));
+
             }
 
         }
-        return checkWhoBetter(inList, result);
+        return result;
     }
 
     // выводит сумму прибыли за показ листа
