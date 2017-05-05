@@ -21,7 +21,8 @@ public class AdvertisementManager {
     public void processVideos() {
         List<Advertisement> availableVideos = storage.list();
         if (availableVideos.isEmpty()) throw new NoVideoAvailableException();
-        List<Advertisement> videoToBeShown = getVideos(availableVideos, 0);
+        List<Advertisement> videoToBeShown = new ArrayList<>();
+        videoToBeShown = getVideos(videoToBeShown, 0);
         if (videoToBeShown.isEmpty()) throw new NoVideoAvailableException();
 
         Collections.sort(videoToBeShown, new Comparator<Advertisement>() {
@@ -50,7 +51,7 @@ public class AdvertisementManager {
 
         for (int i = start; i < storageList.size(); i++) { // проходим по сторейдж массиву
             ad = storageList.get(i);
-            if (!inList.contains(ad) && ad.getHits() > 0 && (inListSummOfTime + ad.getDuration()) < timeSeconds) {
+            if (!inList.contains(ad) && ad.getHits() > 0 && (inListSummOfTime + ad.getDuration()) <= timeSeconds) {
                 inList.add(ad);
                 tmp = getVideos(inList, i);
                 result = checkWhoBetter(result, tmp);
