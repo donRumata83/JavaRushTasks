@@ -20,22 +20,57 @@ public class AdvertisementManager {
 
     }
 
-    public List<Advertisement> getVideos(ArrayList<Advertisement> inList, int start) {
+    public List<Advertisement> getVideos(List<Advertisement> inList, int start) {
         List<Advertisement> storageList = storage.list();
-        List<Advertisement> result;
-        int inListSumm = 0;
-        for (Advertisement ad : inList) {  // сумма времени рекламы в Ин листе
-            inListSumm += ad.getDuration();
-        }
+        List<Advertisement> tmp;
+        List<Advertisement> result = new ArrayList<>();
+        int inListSummOfTime = summOfTime(inList);
+        int inListSummOfMoney = summOfListMoney(inList);
+
         Advertisement ad;
 
         for (int i = start; i < storageList.size(); i++) { // проходим по сторейдж массиву
             ad = storageList.get(i);
-            if (!inList.contains(ad) && ad.getHits() > 0 && (inListSumm + ad.getDuration()) < timeSeconds) {
+            if (!inList.contains(ad) && ad.getHits() > 0 && (inListSummOfTime + ad.getDuration()) < timeSeconds) {
                 inList.add(ad);
-                getVideos(inList, i);
+                tmp = getVideos(inList, i);
+                result = checkWhoBetter(result, tmp);
             }
 
         }
+        return checkWhoBetter(inList, result);
+    }
+
+    // выводит сумму прибыли за показ листа
+    public int summOfListMoney(List<Advertisement> list) {
+        int summ = 0;
+        for (Advertisement ad : list) {
+            summ += ad.getAmountPerOneDisplaying();
+        }
+        return summ;
+    }
+
+    public int summOfTime(List<Advertisement> list) {
+        int summ = 0;
+        for (Advertisement ad : list) {
+            summ += ad.getDuration();
+        }
+        return summ;
+    }
+
+    //сравнивает два листа по требованиям
+    public List<Advertisement> checkWhoBetter(List<Advertisement> check, List<Advertisement> tmp) {
+        List<Advertisement> result = new ArrayList<>();
+        if (summOfListMoney(check) > summOfListMoney(tmp)) result = check;
+        if (summOfListMoney(check) < summOfListMoney(tmp)) result = tmp;
+        if (summOfListMoney(check) == summOfListMoney(tmp)) {
+            if (summOfTime(check) > summOfTime(tmp)) result = check;
+            if (summOfTime(check) < summOfTime(tmp)) result = tmp;
+            if (summOfTime(check) == summOfTime(tmp)) {
+                if (check.size() > tmp.size()) result = check;
+                else result = tmp;
+            }
+        }
+        return result;
     }
 }
