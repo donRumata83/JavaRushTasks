@@ -22,8 +22,14 @@ public class AdvertisementManager {
         List<Advertisement> availableVideos = storage.list();
         if (availableVideos.isEmpty()) throw new NoVideoAvailableException();
         List<Advertisement> videoToBeShown = new ArrayList<>();
+        for (Advertisement ad: availableVideos) {
+            if (ad.getDuration() <= timeSeconds && ad.getHits() > 0) videoToBeShown.add(ad);
+        }
         videoToBeShown = getVideos(videoToBeShown, 0);
         if (videoToBeShown.isEmpty()) throw new NoVideoAvailableException();
+
+
+
 
         Collections.sort(videoToBeShown, new Comparator<Advertisement>() {
             @Override
@@ -59,6 +65,7 @@ public class AdvertisementManager {
 
             }
 
+
         }
         return result;
     }
@@ -72,6 +79,7 @@ public class AdvertisementManager {
         return summ;
     }
 
+    // возвращает суммарную длительность роликов в листе
     public int summOfTime(List<Advertisement> list) {
         int summ = 0;
         for (Advertisement ad : list) {
