@@ -1,6 +1,9 @@
 package com.javarush.task.task30.task3001;
 
-/* 
+
+import java.math.BigInteger;
+
+/*
 Конвертер систем счислений
 */
 public class Solution {
@@ -32,16 +35,15 @@ public class Solution {
         number = new Number(NumerationSystemType._2, "1101001000000001100001001110110111111100110010101000100111011011011001001011001100011001100000111101111");
         result = convertNumberToOtherNumerationSystem(number, NumerationSystemType._12);
         System.out.println(result);
-        number = new Number(NumerationSystemType._2, "1101001000000001100001001110110111111100110010101000100111011011011001001011001100011001100000111101111");
-        result = convertNumberToOtherNumerationSystem(number, NumerationSystemType._16);
+        number = new Number(NumerationSystemType._2, "111");
+        result = convertNumberToOtherNumerationSystem(number, NumerationSystemType._2);
         System.out.println(result);
     }
 
     public static Number convertNumberToOtherNumerationSystem(Number number, NumerationSystem expectedNumerationSystem) {
-          int numSistNumber = number.getNumerationSystem().getNumerationSystemIntValue();
-          if (numSistNumber == expectedNumerationSystem.getNumerationSystemIntValue()) return number;
-          int in10SystemStyle = Integer.parseInt(number.getDigit(), numSistNumber);
-          String convert = Integer.toString(in10SystemStyle, expectedNumerationSystem.getNumerationSystemIntValue());
-        return new Number(expectedNumerationSystem, convert);
+        BigInteger bigInt = new BigInteger(number.getDigit(), number.getNumerationSystem().getNumerationSystemIntValue());
+
+        return new Number(expectedNumerationSystem, bigInt.toString(expectedNumerationSystem.getNumerationSystemIntValue()));
+
     }
 }
