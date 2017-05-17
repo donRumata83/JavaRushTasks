@@ -17,10 +17,20 @@ public class Order {
         this.dishes = ConsoleHelper.getAllDishesForOrder();
     }
 
+    public boolean isEmpty() {
+        return dishes.isEmpty();
+    }
+
+    public int getTotalCookingTime() {
+        int cookingTime = 0;
+        for (Dish dish: dishes) {
+            cookingTime += dish.getDuration();
+        }
+        return cookingTime;
+    }
+
     @Override
     public String toString() {
-        if (dishes.isEmpty())
-            return "";
-        return String.format("Your order: %s of %s", dishes.toString(), tablet.toString());
+        return dishes.isEmpty() ? "" : "Your order: " + dishes + " of " + tablet;
     }
 }
