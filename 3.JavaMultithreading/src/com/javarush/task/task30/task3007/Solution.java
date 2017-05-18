@@ -17,6 +17,7 @@ public class Solution {
         x |= x >> 8;
         x |= x >> 8;
         x |= x >> 8;
+
         return x ^ (x >> 1);
     }
 }
