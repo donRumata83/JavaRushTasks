@@ -29,8 +29,11 @@ public class Model {
     }
 
     void addTile() {
+
         List<Tile> list = getEmptyTiles();
-        list.get((int) (list.size() * Math.random())).setValue(Math.random() < 0.9 ? 2 : 4);
+        if (list != null && list.size() != 0) {
+            list.get((int) (list.size() * Math.random())).setValue(Math.random() < 0.9 ? 2 : 4);
+        }
     }
 
     void resetGameTiles() {
@@ -44,9 +47,37 @@ public class Model {
         addTile();
     }
 
-    private Tile[] compressTiles(Tile[] tiles) {
+    private boolean compressTiles(Tile[] tiles) {
+        boolean isChanged = false;
         Tile temp;
         for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tiles[j].getValue() == 0 && tiles[j + 1].getValue() != 0) {
+                    temp = tiles[j];
+                    tiles[j] = tiles[j + 1];
+                    tiles[j + 1] = temp;
+                    isChanged = true;
+                }
+            }
+        }
+        return isChanged;
+    }
+
+    private boolean mergeTiles(Tile[] tiles) {
+        boolean isChanged = false;
+        for (int j = 0; j < 3; j++) {
+            if (tiles[j].getValue() != 0 && tiles[j].getValue() == tiles[j + 1].getValue()) {
+                tiles[j].setValue(tiles[j].getValue() * 2);
+                tiles[j + 1].setValue(0);
+                if (tiles[j].getValue() > maxTile) maxTile = tiles[j].getValue();
+                score += tiles[j].getValue();
+                isChanged = true;
+
+            }
+        }
+
+        if (isChanged) {
+            Tile temp;
             for (int j = 0; j < 3; j++) {
                 if (tiles[j].getValue() == 0 && tiles[j + 1].getValue() != 0) {
                     temp = tiles[j];
@@ -55,22 +86,20 @@ public class Model {
                 }
             }
         }
-        return tiles;
+
+        return isChanged;
     }
 
-    private Tile[] mergeTiles(Tile[] tiles) {
-
-            for (int j = 0; j < 3; j++) {
-                if (tiles[j].getValue() != 0 && tiles[j].getValue() == tiles[j + 1].getValue()) {
-                    tiles[j].setValue(tiles[j].getValue() *2);
-                    tiles[j+1].setValue(0);
-                    if (tiles[j].getValue() > maxTile) maxTile = tiles[j].getValue();
-                    score+= tiles[j].getValue();
-                    tiles = compressTiles(tiles);
-                }
+    public void left() {
+        boolean isChanged = false;
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            if (compressTiles(gameTiles[i]) | mergeTiles(gameTiles[i])) {
+                isChanged = true;
             }
+        }
+        if (isChanged) addTile();
 
-
-        return tiles;
     }
+
+
 }
