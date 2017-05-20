@@ -216,4 +216,19 @@ public class Model {
             case 3: down(); break;
         }
     }
+
+    // проверка измененя поля
+    private boolean hasBoardChanged() {
+        boolean result = false;
+        int sumNow = 0;
+        int sumPrevious = 0;
+        Tile[][] tmp = previousStates.peek();
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                sumNow += gameTiles[i][j].getValue();
+                sumPrevious += tmp[i][j].getValue();
+            }
+        }
+        return sumNow !=sumPrevious;
+    }
 }
