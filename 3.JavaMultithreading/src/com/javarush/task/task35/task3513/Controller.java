@@ -41,10 +41,13 @@ public class Controller extends KeyAdapter {
             if (!model.canMove()) view.isGameLost = true;
             else {
                 if (!view.isGameLost && !view.isGameWon) {
-                    if (e.getKeyCode() == KeyEvent.VK_LEFT) model.left();
-                    else if (e.getKeyCode() == KeyEvent.VK_RIGHT) model.right();
-                    else if (e.getKeyCode() == KeyEvent.VK_UP) model.up();
-                    else if (e.getKeyCode() == KeyEvent.VK_DOWN) model.down();
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_UP : model.up(); break;
+                        case KeyEvent.VK_DOWN : model.down(); break;
+                        case KeyEvent.VK_LEFT : model.left(); break;
+                        case KeyEvent.VK_RIGHT : model.right(); break;
+                        case KeyEvent.VK_Z : model.rollback(); break;
+                    }
                 }
                 if (model.maxTile == WINNING_TILE) view.isGameWon = true;
             }

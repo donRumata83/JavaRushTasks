@@ -102,17 +102,23 @@ public class Model {
 
     // методы для сдвига в четырех направлениях
     public void left() {
+        if (isSaveNeeded) saveState(this.gameTiles);
         boolean isChanged = false;
         for (int i = 0; i < FIELD_WIDTH; i++) {
             if (compressTiles(gameTiles[i]) | mergeTiles(gameTiles[i])) {
                 isChanged = true;
             }
         }
-        if (isChanged) addTile();
+        if (isChanged) {
+            addTile();
+            isSaveNeeded = true;
+        }
+
 
     }
 
     public void up() {
+        saveState(this.gameTiles);
         rotate();
         left();
         rotate();
@@ -121,6 +127,7 @@ public class Model {
     }
 
     public void right() {
+        saveState(this.gameTiles);
         rotate();
         rotate();
         left();
@@ -129,6 +136,7 @@ public class Model {
     }
 
     public void down() {
+        saveState(this.gameTiles);
         rotate();
         rotate();
         rotate();
@@ -160,17 +168,17 @@ public class Model {
 
     // проверка возможности хода
     public boolean canMove() {
-        if(!getEmptyTiles().isEmpty())
+        if (!getEmptyTiles().isEmpty())
             return true;
-        for(int i = 0; i < gameTiles.length; i++) {
-            for(int j = 1; j < gameTiles.length; j++) {
-                if(gameTiles[i][j].value == gameTiles[i][j-1].value)
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 1; j < gameTiles.length; j++) {
+                if (gameTiles[i][j].value == gameTiles[i][j - 1].value)
                     return true;
             }
         }
-        for(int j = 0; j < gameTiles.length; j++) {
-            for(int i = 1; i < gameTiles.length; i++) {
-                if(gameTiles[i][j].value == gameTiles[i-1][j].value)
+        for (int j = 0; j < gameTiles.length; j++) {
+            for (int i = 1; i < gameTiles.length; i++) {
+                if (gameTiles[i][j].value == gameTiles[i - 1][j].value)
                     return true;
             }
         }
