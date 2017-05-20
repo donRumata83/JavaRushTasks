@@ -2,19 +2,28 @@ package com.javarush.task.task35.task3513;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Model {
-    private static final int FIELD_WIDTH = 4;
-    private Tile[][] gameTiles;
-    int score;
-    int maxTile;
+    private static final int FIELD_WIDTH = 4; // размер поля
+    private Tile[][] gameTiles;               // игровое поле
+    int score;                                // счет
+    int maxTile;                              // значение макимальной плитки
+
+    //для реализации возврата хода
+    private Stack<Integer> previousScores;
+    private Stack<Tile[][]> previousStates;
+    private boolean isSaveNeeded = true;
 
     public Model() {
         resetGameTiles();
         this.score = 0;
         this.maxTile = 2;
+        this.previousScores = new Stack<Integer>();
+        this.previousStates = new Stack<Tile[][]>();
     }
 
+    // вовзращает лист пустых клеток
     private List<Tile> getEmptyTiles() {
         List<Tile> result = new ArrayList<>();
         for (int i = 0; i < FIELD_WIDTH; i++) {
@@ -25,6 +34,7 @@ public class Model {
         return result;
     }
 
+    // добавляет рандомно клетку 2 или 4 (соотношение 1 к 9)
     void addTile() {
 
         List<Tile> list = getEmptyTiles();
@@ -33,6 +43,7 @@ public class Model {
         }
     }
 
+    // сброс всех клеток
     void resetGameTiles() {
         this.gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
         for (int i = 0; i < FIELD_WIDTH; i++) {
@@ -44,6 +55,7 @@ public class Model {
         addTile();
     }
 
+    // сжатие одного ряда влево
     private boolean compressTiles(Tile[] tiles) {
         boolean isChanged = false;
         Tile temp;
@@ -60,6 +72,7 @@ public class Model {
         return isChanged;
     }
 
+    // сложение клеток
     private boolean mergeTiles(Tile[] tiles) {
         boolean isChanged = false;
         for (int j = 0; j < 3; j++) {
@@ -87,6 +100,7 @@ public class Model {
         return isChanged;
     }
 
+    // методы для сдвига в четырех направлениях
     public void left() {
         boolean isChanged = false;
         for (int i = 0; i < FIELD_WIDTH; i++) {
@@ -122,6 +136,7 @@ public class Model {
         rotate();
     }
 
+    // поворот матрицы на 90 градусов против часовой стрелки
     private void rotate() {
         int len = FIELD_WIDTH;
         for (int k = 0; k < len / 2; k++) // border -> center
@@ -138,10 +153,12 @@ public class Model {
         }
     }
 
+    // геттер для поля
     public Tile[][] getGameTiles() {
         return gameTiles;
     }
 
+    // проверка возможности хода
     public boolean canMove() {
         if(!getEmptyTiles().isEmpty())
             return true;
@@ -158,5 +175,27 @@ public class Model {
             }
         }
         return false;
+    }
+
+    // сохраняет состояние в стек
+    private void saveState(Tile[][] field) {
+        Tile[][] fieldToSave = new Tile[field.length][field[0].length];
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[0].length; j++) {
+                fieldToSave[i][j] = new Tile(field[i][j].getValue());
+            }
+        }
+        previousStates.push(fieldToSave);
+        int scoreToSave = score;
+        previousScores.push(scoreToSave);
+        isSaveNeeded = false;
+    }
+
+    // откат на один ход назад
+    public void rollback() {
+        if (!previousStates.isEmpty() && !previousScores.isEmpty()) {
+            this.score = previousScores.pop();
+            this.gameTiles = previousStates.pop();
+        }
     }
 }
