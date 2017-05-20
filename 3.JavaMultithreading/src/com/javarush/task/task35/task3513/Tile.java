@@ -2,28 +2,31 @@ package com.javarush.task.task35.task3513;
 
 import java.awt.*;
 
-/**
- * Created by Rumata on 18.05.2017.
- */
+
 public class Tile {
     int value;
 
+    // конструктор со значением
     public Tile(int value) {
         this.value = value;
     }
 
+    // конструктор по умолчанию
     public Tile() {
         this.value = 0;
     }
 
+    //проверка на пустоту
     public boolean isEmpty() {
         return value == 0;
     }
 
+    // цвет шрифта
     public Color getFontColor() {
         return new Color(value < 16 ? 0x776e65 : 0xf9f6f2);
     }
 
+    // цвет заливки плитки
     public Color getTileColor() {
         Color color;
         switch (value) {
@@ -70,10 +73,12 @@ public class Tile {
         return color;
     }
 
+    // сеттер для значения
     public void setValue(int value) {
         this.value = value;
     }
 
+    // геттер для значения
     public int getValue() {
         return value;
     }
