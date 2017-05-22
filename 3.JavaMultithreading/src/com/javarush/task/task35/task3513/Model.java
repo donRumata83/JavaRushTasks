@@ -210,10 +210,18 @@ public class Model {
     // делает ход в случайном направлении
     public void randomMove() {
         switch (((int) (Math.random() * 100)) % 4) {
-            case 0: left(); break;
-            case 1: up(); break;
-            case 2: right(); break;
-            case 3: down(); break;
+            case 0:
+                left();
+                break;
+            case 1:
+                up();
+                break;
+            case 2:
+                right();
+                break;
+            case 3:
+                down();
+                break;
         }
     }
 
@@ -229,6 +237,16 @@ public class Model {
                 sumPrevious += tmp[i][j].getValue();
             }
         }
-        return sumNow !=sumPrevious;
+        return sumNow != sumPrevious;
+    }
+
+    private MoveEfficiency getMoveEfficiency(Move move) {
+        MoveEfficiency moveEfficiency;
+        move.move();
+        if (hasBoardChanged()) moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        else moveEfficiency = new MoveEfficiency(-1, 0, move);
+        rollback();
+
+        return moveEfficiency;
     }
 }
