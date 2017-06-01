@@ -1,84 +1,62 @@
 package com.javarush.task.task31.task3101;
 
 
-import java.io.File;
+import java.io.*;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /*
 Проход по дереву файлов
 */
+
 public class Solution {
-    public static void main(String[] args) {
-        File pathToSearch = new File(args[0]);
-        File targetFile = new File(args[1]);
-        PriorityQueue<File> queue = new PriorityQueue<>();
-        ArrayList<File> fileList = new ArrayList<>();
-        queue.add(pathToSearch);
-        Path path;
-        File tmp;
-        while (!queue.isEmpty()) {
-            tmp = queue.poll();
-            path = tmp.toPath();
-            if (!tmp.equals(targetFile)) {
-                if (Files.isRegularFile(path)) {
-                    if (tmp.length() <= 50) {
-                        fileList.add(tmp);
-                    } else FileUtils.deleteFile(tmp);
-                }
+    public static TreeSet<File> Lower50 = new TreeSet<>();
 
-                if (Files.isDirectory(path)) {
-                    try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
-                        for (Path file : directoryStream) {
-                            queue.add(file.toFile());
-                        }
-                    } catch (IOException e) {
-                    }
+    public static void main(String[] args) throws IOException {
+        for (String s : args)
+            System.out.println(s);
+        File path = new File(args[0]); //Путь к директории
+        File resultFileAbsolutePath = new File(args[1]); //Файл с контекстом всех файлом <50
+        File allFilesContent = new File(resultFileAbsolutePath.getParent() + "/allFilesContent.txt");
+        FileUtils.renameFile(resultFileAbsolutePath, allFilesContent);
+        //хз верно ли указывать в конструкторе "allFilesContent", а не "resultFileAbsolutePath"
+        //но валидатор принимает, а во втором варианте - нет
+        try (FileOutputStream fos = new FileOutputStream(allFilesContent)) {
 
-                }
-            }
-        }
-
-        Collections.sort(fileList, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
-        String targetDirectory = targetFile.getAbsolutePath().substring(0, targetFile.getAbsolutePath().lastIndexOf(File.separator) + 1);
-        File newTargetFile = new File(targetDirectory + "allFilesContent.txt");
-        FileUtils.renameFile(targetFile, newTargetFile);
-
-        char[] buffer = new char[1000];
-        int count = 0;
-        try (FileWriter fileWriter = new FileWriter(newTargetFile)) {
-            for (File file : fileList) {
-                try (FileReader fileReader = new FileReader(file)) {
-                    while (fileReader.ready()) {
-                        count = fileReader.read(buffer);
-                        fileWriter.write(buffer, 0, count);
-                    }
-                    fileWriter.write("\n");
-                } catch (IOException e) {
-                }
+            deepSearch(path);
+            TreeMap<String, File> fileAndPath = new TreeMap<>();
+            for (File f : Lower50)
+                fileAndPath.put(f.getName(), f);
+            for (Map.Entry<String, File> pair : fileAndPath.entrySet()) {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(pair.getValue()));
+                String s = "";
+                while ((s = bufferedReader.readLine()) != null)
+                    fos.write((s + "\n").getBytes());
+                // fos.write("\n".getBytes());
+                bufferedReader.close();
             }
         } catch (IOException e) {
+
         }
-
-
     }
 
     public static void deleteFile(File file) {
         if (!file.delete()) System.out.println("Can not delete file with name " + file.getName());
+    }
+
+    public static void deepSearch(File f) {
+        if (f.isDirectory()) {
+            for (File ff : f.listFiles()) {
+                deepSearch(ff);
+            }
+        } else if (f.isFile()) {
+            if (f.length() > 50)
+                FileUtils.deleteFile(f);
+            else
+                Lower50.add(f);
+        }
     }
 }
